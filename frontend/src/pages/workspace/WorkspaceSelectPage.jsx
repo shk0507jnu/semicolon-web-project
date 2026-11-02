@@ -2,16 +2,15 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import ListRow from '../../components/common/ListRow';
+import PageHeading from '../../components/common/PageHeading';
 import { useWorkspace } from '../../contexts/WorkspaceContext';
-import { MOCK_WORKSPACES } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 
 // 03 워크스페이스 선택 (피그마: 03 워크스페이스 선택, 1:52)
 export default function WorkspaceSelectPage() {
   const navigate = useNavigate();
-  const { selectWorkspace } = useWorkspace();
-  // TODO: 백엔드 API 연결 후 내가 참여 중인 워크스페이스 목록 받아오기
-  const workspaces = MOCK_WORKSPACES;
+  // TODO: 백엔드 API 연결 후 workspaces 는 서버에서 받아오기 (WorkspaceContext 참고)
+  const { workspaces, selectWorkspace } = useWorkspace();
 
   const handleSelect = (workspace) => {
     selectWorkspace(workspace.id);
@@ -20,11 +19,11 @@ export default function WorkspaceSelectPage() {
 
   return (
     <div className="flex flex-col gap-5 p-4">
-      <header className="flex flex-col gap-1">
-        <p className="text-xs leading-[18px] text-darkblue">MY WORKSPACES</p>
-        <h1 className="text-2xl leading-9 font-bold text-ink-strong">어디에서 일하시나요?</h1>
-        <p className="text-xs leading-[18px] text-muted">참여 중인 워크스페이스를 선택하세요.</p>
-      </header>
+      <PageHeading
+        eyebrow="MY WORKSPACES"
+        title="어디에서 일하시나요?"
+        description="참여 중인 워크스페이스를 선택하세요."
+      />
 
       <Card title={`내 워크스페이스 · ${workspaces.length}`}>
         {workspaces.map((ws) => (

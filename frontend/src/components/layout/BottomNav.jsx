@@ -12,7 +12,8 @@ export default function BottomNav() {
     currentWorkspaceId ? generatePath(path, { workspaceId: currentWorkspaceId }) : PATHS.workspaces;
 
   const items = [
-    { label: '워크스페이스', to: PATHS.workspaces, active: pathname.startsWith('/workspaces') },
+    // 피그마 04(생성) 화면에서는 하단 메뉴가 모두 회색이라, 03 선택 화면에서만 활성 표시
+    { label: '워크스페이스', to: PATHS.workspaces, active: pathname === PATHS.workspaces },
     { label: '달력', to: inWorkspace(PATHS.calendar), active: /\/w\/[^/]+\/(calendar|schedule)/.test(pathname) },
     { label: '대타', to: inWorkspace(PATHS.swaps), active: /\/w\/[^/]+\/swaps/.test(pathname) },
     { label: 'MY', to: PATHS.me, active: pathname.startsWith('/me') },

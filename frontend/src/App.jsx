@@ -5,6 +5,7 @@ import { WorkspaceProvider } from './contexts/WorkspaceContext';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
 import PlaceholderPage from './pages/PlaceholderPage';
+import WorkspaceCreatePage from './pages/workspace/WorkspaceCreatePage';
 import WorkspaceSelectPage from './pages/workspace/WorkspaceSelectPage';
 import { PATHS, PENDING_SCREENS } from './routes/paths';
 
@@ -23,6 +24,7 @@ export default function App() {
             {/* 로그인 후 화면: 상단바 + 하단 메뉴 */}
             <Route element={<AppLayout />}>
               <Route path={PATHS.workspaces} element={<WorkspaceSelectPage />} />
+              <Route path={PATHS.workspaceNew} element={<WorkspaceCreatePage />} />
 
               {PENDING_SCREENS.map((screen) => (
                 <Route
