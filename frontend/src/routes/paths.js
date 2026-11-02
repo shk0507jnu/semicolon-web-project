@@ -24,7 +24,6 @@ export const PATHS = {
 
 // 아직 구현하지 않은 화면 목록 (구현하면 App.jsx에 실제 페이지로 연결하고 여기서 빼면 돼)
 export const PENDING_SCREENS = [
-  { no: '05', name: '달력 대시보드', path: PATHS.calendar, access: 'auth' },
   { no: '06', name: '날짜별 근무 상세', path: PATHS.dayDetail, access: 'auth' },
   { no: '07', name: '근무 배치 관리', path: PATHS.scheduleManage, access: 'admin' },
   { no: '08', name: '최소 근무 인원 설정', path: PATHS.minStaff, access: 'admin' },

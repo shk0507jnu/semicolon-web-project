@@ -3,6 +3,7 @@ import AppLayout from './components/layout/AppLayout';
 import MobileLayout from './components/layout/MobileLayout';
 import { WorkspaceProvider } from './contexts/WorkspaceContext';
 import LoginPage from './pages/auth/LoginPage';
+import CalendarDashboardPage from './pages/calendar/CalendarDashboardPage';
 import SignupPage from './pages/auth/SignupPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import WorkspaceCreatePage from './pages/workspace/WorkspaceCreatePage';
@@ -25,6 +26,7 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route path={PATHS.workspaces} element={<WorkspaceSelectPage />} />
               <Route path={PATHS.workspaceNew} element={<WorkspaceCreatePage />} />
+              <Route path={PATHS.calendar} element={<CalendarDashboardPage />} />
 
               {PENDING_SCREENS.map((screen) => (
                 <Route
