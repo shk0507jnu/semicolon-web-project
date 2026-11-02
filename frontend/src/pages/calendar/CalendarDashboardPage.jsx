@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import DayTimeline from '../../components/calendar/DayTimeline';
 import MonthCalendar from '../../components/calendar/MonthCalendar';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import ListRow from '../../components/common/ListRow';
 import PageHeading from '../../components/common/PageHeading';
-import { useWorkspace } from '../../contexts/WorkspaceContext';
+import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
 import { MOCK_MY_SHIFTS, MOCK_NOTICES, MOCK_PAYROLL_SUMMARY, MOCK_USER } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 import { formatMonthDayWeekday, formatWon, getToday, parseISODate } from '../../utils/date';
@@ -17,9 +17,7 @@ const callName = (name) => (name.length === 3 ? name.slice(1) : name);
 // 05 달력 대시보드 (피그마: 05 달력 대시보드, 1:52)
 export default function CalendarDashboardPage() {
   const navigate = useNavigate();
-  const { workspaceId } = useParams();
-  const { workspaces } = useWorkspace();
-  const workspace = workspaces.find((ws) => ws.id === workspaceId);
+  const { workspaceId, eyebrow } = useRouteWorkspace();
 
   // TODO: 백엔드 API 연결 후 아래 임시 데이터를 워크스페이스별 실제 데이터로 바꾸기
   const shifts = MOCK_MY_SHIFTS;
@@ -39,7 +37,7 @@ export default function CalendarDashboardPage() {
   return (
     <div className="flex flex-col gap-5 p-4">
       <PageHeading
-        eyebrow={workspace ? `${workspace.name} · 워크스페이스` : '워크스페이스'}
+        eyebrow={eyebrow}
         title="내 근무 달력"
         description={`${callName(MOCK_USER.name)}님, ${
           todayShift ? `오늘은 ${todayShift.label}가 있어요.` : '오늘은 근무가 없어요.'

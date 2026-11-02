@@ -48,11 +48,17 @@ export function WorkspaceProvider({ children }) {
     return workspace;
   };
 
+  // 초대받은 워크스페이스에 참여 (이미 참여 중이면 그대로 둬)
+  const joinWorkspace = (workspace) => {
+    setWorkspaces((prev) => (prev.some((ws) => ws.id === workspace.id) ? prev : [...prev, workspace]));
+    selectWorkspace(workspace.id);
+  };
+
   const currentWorkspace = workspaces.find((ws) => ws.id === currentWorkspaceId) ?? null;
 
   return (
     <WorkspaceContext.Provider
-      value={{ workspaces, currentWorkspaceId, currentWorkspace, selectWorkspace, addWorkspace }}
+      value={{ workspaces, currentWorkspaceId, currentWorkspace, selectWorkspace, addWorkspace, joinWorkspace }}
     >
       {children}
     </WorkspaceContext.Provider>

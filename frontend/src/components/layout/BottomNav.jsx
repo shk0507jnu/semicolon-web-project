@@ -14,7 +14,8 @@ export default function BottomNav() {
   const items = [
     // 피그마 04(생성) 화면에서는 하단 메뉴가 모두 회색이라, 03 선택 화면에서만 활성 표시
     { label: '워크스페이스', to: PATHS.workspaces, active: pathname === PATHS.workspaces },
-    { label: '달력', to: inWorkspace(PATHS.calendar), active: /\/w\/[^/]+\/(calendar|schedule)/.test(pathname) },
+    // 피그마 기준: 05 달력·06 근무 상세·07 근무 배치에서만 '달력' 활성 (08 최소 인원, 09 멤버는 모두 회색)
+    { label: '달력', to: inWorkspace(PATHS.calendar), active: /^\/w\/[^/]+\/(calendar(\/[^/]+)?|schedule)$/.test(pathname) },
     { label: '대타', to: inWorkspace(PATHS.swaps), active: /\/w\/[^/]+\/swaps/.test(pathname) },
     { label: 'MY', to: PATHS.me, active: pathname.startsWith('/me') },
   ];

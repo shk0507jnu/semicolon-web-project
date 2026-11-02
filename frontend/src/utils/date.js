@@ -30,6 +30,17 @@ export function formatMonthDayWeekday(iso) {
   return `${date.getMonth() + 1}월 ${date.getDate()}일 (${WEEKDAYS[date.getDay()]})`;
 }
 
+// '2026-09-09' → '9월 9일 수요일'
+export function formatMonthDayFullWeekday(iso) {
+  const date = parseISODate(iso);
+  return `${date.getMonth() + 1}월 ${date.getDate()}일 ${WEEKDAYS[date.getDay()]}요일`;
+}
+
+// '2026-09-09' → '수'
+export function weekdayOf(iso) {
+  return WEEKDAYS[parseISODate(iso).getDay()];
+}
+
 // 달력 한 달치를 주 단위 배열로 만들어줘. 빈 칸은 null.
 // 예) 2026년 9월 → [[null, null, '2026-09-01', ...], ...]
 export function getMonthWeeks(year, monthIndex) {

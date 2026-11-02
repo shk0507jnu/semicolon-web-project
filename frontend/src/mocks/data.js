@@ -1,7 +1,7 @@
 // 백엔드 API가 나오기 전까지 화면에 보여줄 임시 데이터 (피그마 예시 그대로)
 // API가 연결되면 이 파일 대신 서버에서 받아온 값을 쓰면 돼.
 
-export const MOCK_USER = { name: '김민수' };
+export const MOCK_USER = { name: '김민수', email: 'minsu@example.com' };
 
 // 피그마 예시가 2026년 9월 9일 기준이라, 확인하기 쉽게 '오늘'을 그날로 고정해뒀어.
 // TODO: 실제 서비스에서는 null 로 바꾸면 진짜 오늘 날짜를 써 (utils 의 getToday 참고)
@@ -40,3 +40,50 @@ export const MOCK_WORKSPACES = [
   { id: 'capstone', name: '캡스톤 프로젝트', role: '근무자', memberCount: 6, scheduleSummary: '주 3회 협업' },
   { id: 'store', name: '주말 편의점', role: '근무자', memberCount: 5, scheduleSummary: '토·일 09:00–15:00' },
 ];
+
+// ───────── 2단계 (06~10) ─────────
+
+// 워크스페이스 멤버 (09 멤버 관리, 07 근무자 선택)
+export const MOCK_MEMBERS = [
+  { id: 'm1', name: '김민수', role: '관리자', phone: '010-2481-3902', hourlyWage: 12000 },
+  { id: 'm2', name: '박서연', role: '근무자', phone: '010-5724-1180', hourlyWage: 12000 },
+  { id: 'm3', name: '이준호', role: '근무자', phone: '010-9061-4428', hourlyWage: 11500 },
+  { id: 'm4', name: '최유진', role: '근무자', phone: '010-3318-7056', hourlyWage: 12500 },
+];
+
+// 날짜별 근무 배치 (06, 07) — 날짜: [{ memberId, start, end, label }]
+// 여기 없는 날짜는 MOCK_MY_SHIFTS(내 근무)만 배치된 걸로 봐.
+export const MOCK_DAY_ASSIGNMENTS = {
+  '2026-09-09': [
+    { memberId: 'm1', start: '14:00', end: '22:00', label: '오후 근무' },
+    { memberId: 'm2', start: '14:00', end: '18:00', label: '오후 근무' },
+  ],
+};
+
+// 날짜별 시간대 최소 인원 (06, 07) — 날짜: [{ start, end, min }]
+// TODO: 원래는 08의 규칙(요일·시간·인원)으로 계산되는 값이야. 백엔드가 날짜별로 계산해서 주는 걸 가정하고 피그마 06 예시를 넣어뒀어.
+export const MOCK_DAY_SLOTS = {
+  '2026-09-09': [
+    { start: '14:00', end: '18:00', min: 3 },
+    { start: '18:00', end: '22:00', min: 1 },
+  ],
+};
+
+// 최소 근무 인원 규칙 (08)
+const WEEKDAYS_MON_FRI = ['월', '화', '수', '목', '금'];
+export const MOCK_STAFFING_RULES = [
+  { id: 'r1', days: WEEKDAYS_MON_FRI, start: '09:00', end: '14:00', min: 2 },
+  { id: 'r2', days: ['수'], start: '14:00', end: '18:00', min: 3 },
+  { id: 'r3', days: WEEKDAYS_MON_FRI, start: '18:00', end: '22:00', min: 1 },
+];
+
+// 초대 코드 (09 초대 링크, 10 초대 링크 참여)
+export const MOCK_INVITES = {
+  CAFE24: {
+    workspace: { id: 'cafe', name: '카페 알바', role: '근무자', memberCount: 4, scheduleSummary: '오늘 14:00–22:00' },
+    inviterName: '김민수',
+    description: '서로의 근무를 확인하고 함께 일정을 맞추는 공간입니다.',
+  },
+};
+// 워크스페이스별 초대 코드 (09에서 보여줄 링크)
+export const MOCK_INVITE_CODES = { cafe: 'CAFE24' };

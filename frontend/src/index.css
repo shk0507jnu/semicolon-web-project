@@ -19,6 +19,8 @@
   --color-line-soft: #dddde8;     /* 탭 하단 구분선 */
   --color-canvas: #f9f9f9;        /* 페이지 배경, 입력창 배경 */
   --color-track: #e7edf2;         /* 근무 시간 막대 배경 (피그마 변수 color-track) */
+  --color-danger: #b94839;        /* 인원 부족 경고 글씨 (피그마 변수 color-danger) */
+  --color-danger-bg: #fff1ed;     /* 인원 부족 경고 배경 (피그마 변수 color-dangerBg) */
 }
 
 body {

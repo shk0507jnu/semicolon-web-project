@@ -24,11 +24,6 @@ export const PATHS = {
 
 // 아직 구현하지 않은 화면 목록 (구현하면 App.jsx에 실제 페이지로 연결하고 여기서 빼면 돼)
 export const PENDING_SCREENS = [
-  { no: '06', name: '날짜별 근무 상세', path: PATHS.dayDetail, access: 'auth' },
-  { no: '07', name: '근무 배치 관리', path: PATHS.scheduleManage, access: 'admin' },
-  { no: '08', name: '최소 근무 인원 설정', path: PATHS.minStaff, access: 'admin' },
-  { no: '09', name: '멤버 관리', path: PATHS.members, access: 'admin' },
-  { no: '10', name: '초대 링크 참여', path: PATHS.invite, access: 'auth' },
   { no: '11', name: '대타 요청 목록', path: PATHS.swaps, access: 'auth' },
   { no: '12', name: '대타 요청 작성', path: PATHS.swapNew, access: 'auth' },
   { no: '13', name: '공지 목록', path: PATHS.notices, access: 'auth' },
