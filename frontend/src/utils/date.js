@@ -64,6 +64,20 @@ export function timeToHours(time) {
   return h + m / 60;
 }
 
+// '2026-09-09T10:30' → '2026.09.09' (withTime 이면 '2026.09.09 10:30')
+export function formatDotDateTime(dateTime, withTime = false) {
+  const [date, time = ''] = dateTime.split('T');
+  const dotted = date.replaceAll('-', '.');
+  return withTime && time ? `${dotted} ${time.slice(0, 5)}` : dotted;
+}
+
+// 지금 시각 'YYYY-MM-DDTHH:mm' (새로 쓴 공지 작성 시간용, 확인용 '오늘' 날짜 기준)
+export function nowDateTime() {
+  const now = new Date();
+  const pad2 = (n) => String(n).padStart(2, '0');
+  return `${getToday()}T${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+}
+
 // 768000 → '768,000원'
 export function formatWon(amount) {
   return `${amount.toLocaleString('ko-KR')}원`;

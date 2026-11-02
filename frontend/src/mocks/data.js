@@ -20,11 +20,7 @@ export const MOCK_MY_SHIFTS = Object.fromEntries(
 // 이번 달 예상 급여 (05 달력 대시보드)
 export const MOCK_PAYROLL_SUMMARY = { totalHours: 64, hourlyWage: 12000 };
 
-// 공지 목록 (05 최근 공지, 13 공지 목록에서도 쓸 예정)
-export const MOCK_NOTICES = [
-  { id: 'n1', title: '내일 오전 근무 변경', summary: '김민수 · 오전 9시로 조정' },
-  { id: 'n2', title: '9월 스케줄 확인 요청', summary: '확정 전 내 근무 시간을 확인해주세요.' },
-];
+// (공지 목록은 아래 3단계 MOCK_NOTICES 로 옮겼어)
 
 // 워크스페이스 유형 (04 생성 화면 드롭다운)
 // TODO: 피그마에는 '아르바이트'만 보여서 나머지는 임시로 넣었어. 형한테 목록 확인 필요
@@ -87,3 +83,57 @@ export const MOCK_INVITES = {
 };
 // 워크스페이스별 초대 코드 (09에서 보여줄 링크)
 export const MOCK_INVITE_CODES = { cafe: 'CAFE24' };
+
+// ───────── 3단계 (11~15) ─────────
+
+// 대타 요청 (11 목록, 12 작성)
+// status: 'open'(모집 중) | 'applied'(내가 지원함) | 'approved'(승인 완료)
+export const MOCK_SWAP_REQUESTS = [
+  { id: 's1', date: '2026-09-12', start: '14:00', end: '22:00', label: '오후 근무', requesterName: '박서연', reason: '개인 일정', status: 'open' },
+  { id: 's2', date: '2026-09-13', start: '09:00', end: '15:00', label: '오전 근무', requesterName: '최유진', reason: '학사 일정', status: 'open' },
+  { id: 's3', date: '2026-09-08', start: '14:00', end: '18:00', label: '오후 근무', requesterName: '김민수', substituteName: '이준호', reason: '개인 일정', status: 'approved' },
+];
+
+// 공지 (05 최근 공지, 13 목록, 14 상세, 15 작성)
+// - pinned: 중요 공지(목록 맨 위, 제목 앞에 [필독])
+// - headline: 상세 화면 두 번째 카드 제목 (15에서 새로 쓴 공지는 없음)
+// - preview: 05 '최근 공지'에 보여줄 한 줄 요약
+// 피그마에 본문이 없는 공지(n1, n3)는 내용을 임시로 채워뒀어.
+export const MOCK_NOTICES = [
+  {
+    id: 'n2',
+    title: '9월 스케줄 확인 요청',
+    pinned: true,
+    authorName: '김민수',
+    authorRole: '관리자',
+    createdAt: '2026-09-09T10:30',
+    read: false,
+    headline: '9월 근무 일정을 확인해주세요',
+    body: '안녕하세요, 카페 알바 팀 여러분.\n\n9월 근무 일정이 등록되었습니다. 달력에서 본인의 근무 날짜와 시간을 확인해주세요.\n\n변경이 필요한 경우 9월 11일까지 관리자에게 알려주세요. 대타가 필요한 근무는 대타 요청 메뉴에 등록할 수 있습니다.\n\n확인 후 아래 버튼을 눌러주세요.',
+    preview: '확정 전 내 근무 시간을 확인해주세요.',
+  },
+  {
+    id: 'n1',
+    title: '내일 오전 근무 변경',
+    pinned: false,
+    authorName: '김민수',
+    authorRole: '관리자',
+    createdAt: '2026-09-09T11:00',
+    read: false,
+    headline: '9월 10일 오전 근무 시간이 바뀌어요',
+    body: '내일(9월 10일) 오전 근무 시작 시간이 오전 9시로 조정되었습니다.\n\n해당 근무자는 시간을 다시 확인해주세요.',
+    preview: '김민수 · 오전 9시로 조정',
+  },
+  {
+    id: 'n3',
+    title: '추석 연휴 운영 안내',
+    pinned: false,
+    authorName: '김민수',
+    authorRole: '관리자',
+    createdAt: '2026-09-07T09:00',
+    read: true,
+    headline: '추석 연휴 기간 운영 시간 안내',
+    body: '추석 연휴 기간에는 운영 시간이 단축됩니다.\n\n자세한 근무 일정은 달력에서 확인해주세요.',
+    preview: '추석 연휴 기간 운영 시간 안내',
+  },
+];

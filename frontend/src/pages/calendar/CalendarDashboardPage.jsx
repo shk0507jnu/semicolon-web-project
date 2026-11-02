@@ -7,7 +7,8 @@ import Card from '../../components/common/Card';
 import ListRow from '../../components/common/ListRow';
 import PageHeading from '../../components/common/PageHeading';
 import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
-import { MOCK_MY_SHIFTS, MOCK_NOTICES, MOCK_PAYROLL_SUMMARY, MOCK_USER } from '../../mocks/data';
+import { sortByRecent, useNotices } from '../../contexts/NoticeContext';
+import { MOCK_MY_SHIFTS, MOCK_PAYROLL_SUMMARY, MOCK_USER } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 import { formatMonthDayWeekday, formatWon, getToday, parseISODate } from '../../utils/date';
 
@@ -21,7 +22,8 @@ export default function CalendarDashboardPage() {
 
   // TODO: 백엔드 API 연결 후 아래 임시 데이터를 워크스페이스별 실제 데이터로 바꾸기
   const shifts = MOCK_MY_SHIFTS;
-  const notices = MOCK_NOTICES;
+  const { notices: allNotices } = useNotices();
+  const notices = sortByRecent(allNotices).slice(0, 2); // 최근 공지 2개
   const { totalHours, hourlyWage } = MOCK_PAYROLL_SUMMARY;
 
   const today = getToday();
@@ -81,7 +83,7 @@ export default function CalendarDashboardPage() {
           <ListRow
             key={notice.id}
             title={notice.title}
-            summary={notice.summary}
+            summary={notice.preview}
             onClick={() => navigate(generatePath(PATHS.noticeDetail, { workspaceId, noticeId: notice.id }))}
           />
         ))}
