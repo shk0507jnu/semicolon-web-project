@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# 피그마 임시 에셋 URL이 들어 있어서 저장소에는 올리지 않음
+scripts/fetch-figma-assets.mjs
