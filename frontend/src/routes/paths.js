@@ -23,7 +23,5 @@ export const PATHS = {
 };
 
 // 아직 구현하지 않은 화면 목록 (구현하면 App.jsx에 실제 페이지로 연결하고 여기서 빼면 돼)
-export const PENDING_SCREENS = [
-  { no: '16', name: '급여 확인', path: PATHS.payroll, access: 'auth' },
-  { no: '17', name: '내 정보', path: PATHS.me, access: 'auth' },
-];
+// 17개 화면을 모두 구현해서 지금은 비어 있어. 새 화면(예: 비밀번호 찾기)이 생기면 여기에 먼저 추가해.
+export const PENDING_SCREENS = [];

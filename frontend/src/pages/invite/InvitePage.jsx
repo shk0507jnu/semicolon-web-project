@@ -4,7 +4,8 @@ import Card from '../../components/common/Card';
 import ListRow from '../../components/common/ListRow';
 import PageHeading from '../../components/common/PageHeading';
 import { useWorkspace } from '../../contexts/WorkspaceContext';
-import { MOCK_INVITES, MOCK_USER } from '../../mocks/data';
+import { useUser } from '../../contexts/UserContext';
+import { MOCK_INVITES } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 
 // 10 초대 링크 참여 (피그마: 10 초대 링크 참여, 1:52)
@@ -13,6 +14,7 @@ export default function InvitePage() {
   const navigate = useNavigate();
   const { inviteCode } = useParams();
   const { joinWorkspace } = useWorkspace();
+  const { user } = useUser();
 
   // TODO: 백엔드 연결 후 초대 코드로 워크스페이스 정보 조회
   const invite = MOCK_INVITES[inviteCode?.toUpperCase()];
@@ -51,7 +53,7 @@ export default function InvitePage() {
       </Card>
 
       <Card title="참여 정보">
-        <ListRow title="내 계정" summary={`${MOCK_USER.name} · ${MOCK_USER.email}`} />
+        <ListRow title="내 계정" summary={`${user.name} · ${user.email}`} />
         <ListRow title="참여 역할" summary={`${workspace.role} · 관리자가 역할을 변경할 수 있어요.`} />
       </Card>
 

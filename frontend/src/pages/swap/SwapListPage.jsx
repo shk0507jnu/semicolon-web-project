@@ -7,8 +7,8 @@ import ListRow from '../../components/common/ListRow';
 import PageHeading from '../../components/common/PageHeading';
 import SegmentedControl from '../../components/common/SegmentedControl';
 import { useSwaps } from '../../contexts/SwapContext';
+import { useUser } from '../../contexts/UserContext';
 import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
-import { MOCK_USER } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 import { formatMonthDayWeekday } from '../../utils/date';
 
@@ -26,7 +26,9 @@ export default function SwapListPage() {
   const [filter, setFilter] = useState('all');
   const [selectedId, setSelectedId] = useState(null);
 
-  const isMine = (r) => r.requesterName === MOCK_USER.name;
+  const { user } = useUser();
+  // TODO: 백엔드 연결 후 이름 대신 사용자 id로 비교
+  const isMine = (r) => r.requesterName === user.name;
   const visible = filter === 'mine' ? requests.filter(isMine) : requests;
   const needed = visible.filter((r) => r.status !== 'approved');
   const processed = visible.filter((r) => r.status === 'approved');

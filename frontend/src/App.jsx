@@ -3,16 +3,19 @@ import AppLayout from './components/layout/AppLayout';
 import MobileLayout from './components/layout/MobileLayout';
 import { NoticeProvider } from './contexts/NoticeContext';
 import { SwapProvider } from './contexts/SwapContext';
+import { UserProvider } from './contexts/UserContext';
 import { WorkspaceProvider } from './contexts/WorkspaceContext';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
 import CalendarDashboardPage from './pages/calendar/CalendarDashboardPage';
 import DayDetailPage from './pages/calendar/DayDetailPage';
 import InvitePage from './pages/invite/InvitePage';
+import MyPage from './pages/me/MyPage';
 import MembersPage from './pages/members/MembersPage';
 import NoticeCreatePage from './pages/notice/NoticeCreatePage';
 import NoticeDetailPage from './pages/notice/NoticeDetailPage';
 import NoticeListPage from './pages/notice/NoticeListPage';
+import PayrollPage from './pages/payroll/PayrollPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import MinStaffPage from './pages/schedule/MinStaffPage';
 import ScheduleManagePage from './pages/schedule/ScheduleManagePage';
@@ -22,14 +25,17 @@ import WorkspaceCreatePage from './pages/workspace/WorkspaceCreatePage';
 import WorkspaceSelectPage from './pages/workspace/WorkspaceSelectPage';
 import { PATHS, PENDING_SCREENS } from './routes/paths';
 
-// 앱 전체에서 공유하는 상태 (워크스페이스, 대타 요청, 공지)
+// 앱 전체에서 공유하는 상태 (사용자, 워크스페이스, 대타 요청, 공지)
+// Swap·Notice 는 작성자 이름 때문에 User 를 쓰니까 User 가 가장 바깥에 있어야 해
 function AppProviders({ children }) {
   return (
-    <WorkspaceProvider>
-      <SwapProvider>
-        <NoticeProvider>{children}</NoticeProvider>
-      </SwapProvider>
-    </WorkspaceProvider>
+    <UserProvider>
+      <WorkspaceProvider>
+        <SwapProvider>
+          <NoticeProvider>{children}</NoticeProvider>
+        </SwapProvider>
+      </WorkspaceProvider>
+    </UserProvider>
   );
 }
 
@@ -65,6 +71,10 @@ export default function App() {
               <Route path={PATHS.notices} element={<NoticeListPage />} />
               <Route path={PATHS.noticeDetail} element={<NoticeDetailPage />} />
               <Route path={PATHS.noticeNew} element={<NoticeCreatePage />} />
+
+              {/* 4단계 */}
+              <Route path={PATHS.payroll} element={<PayrollPage />} />
+              <Route path={PATHS.me} element={<MyPage />} />
 
               {PENDING_SCREENS.map((screen) => (
                 <Route

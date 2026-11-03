@@ -8,7 +8,9 @@ import ListRow from '../../components/common/ListRow';
 import PageHeading from '../../components/common/PageHeading';
 import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
 import { sortByRecent, useNotices } from '../../contexts/NoticeContext';
-import { MOCK_MY_SHIFTS, MOCK_PAYROLL_SUMMARY, MOCK_USER } from '../../mocks/data';
+import { useUser } from '../../contexts/UserContext';
+import { MOCK_MY_SHIFTS } from '../../mocks/data';
+import { getPayrollSummary } from '../../utils/payroll';
 import { PATHS } from '../../routes/paths';
 import { formatMonthDayWeekday, formatWon, getToday, parseISODate } from '../../utils/date';
 
@@ -24,7 +26,8 @@ export default function CalendarDashboardPage() {
   const shifts = MOCK_MY_SHIFTS;
   const { notices: allNotices } = useNotices();
   const notices = sortByRecent(allNotices).slice(0, 2); // 최근 공지 2개
-  const { totalHours, hourlyWage } = MOCK_PAYROLL_SUMMARY;
+  const { totalHours, totalPay, hourlyWage } = getPayrollSummary();
+  const { user } = useUser();
 
   const today = getToday();
   const [selectedDate, setSelectedDate] = useState(today);
@@ -41,7 +44,7 @@ export default function CalendarDashboardPage() {
       <PageHeading
         eyebrow={eyebrow}
         title="내 근무 달력"
-        description={`${callName(MOCK_USER.name)}님, ${
+        description={`${callName(user.name)}님, ${
           todayShift ? `오늘은 ${todayShift.label}가 있어요.` : '오늘은 근무가 없어요.'
         }`}
       />
@@ -71,8 +74,9 @@ export default function CalendarDashboardPage() {
         </Button>
       </Card>
 
-      <Card title="이번 달 예상 급여">
-        <p className="text-[28px] leading-[42px] font-bold text-darkblue">{formatWon(totalHours * hourlyWage)}</p>
+      {/* 피그마에 16 급여 확인으로 가는 버튼이 없어서, 이 카드를 누르면 이동하게 연결했어 */}
+      <Card title="이번 달 예상 급여" onClick={() => navigate(generatePath(PATHS.payroll, { workspaceId }))}>
+        <p className="text-[28px] leading-[42px] font-bold text-darkblue">{formatWon(totalPay)}</p>
         <p className="text-sm leading-[21px] text-muted">
           누적 {totalHours}시간 · 시급 {hourlyWage.toLocaleString('ko-KR')}원 기준
         </p>

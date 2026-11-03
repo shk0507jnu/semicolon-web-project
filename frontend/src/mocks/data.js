@@ -1,7 +1,8 @@
 // 백엔드 API가 나오기 전까지 화면에 보여줄 임시 데이터 (피그마 예시 그대로)
 // API가 연결되면 이 파일 대신 서버에서 받아온 값을 쓰면 돼.
 
-export const MOCK_USER = { name: '김민수', email: 'minsu@example.com' };
+// 로그인한 사용자 (17 내 정보에서 수정 가능 → contexts/UserContext.jsx 에서 관리)
+export const MOCK_USER = { name: '김민수', email: 'minsu@example.com', phone: '010-2481-3902' };
 
 // 피그마 예시가 2026년 9월 9일 기준이라, 확인하기 쉽게 '오늘'을 그날로 고정해뒀어.
 // TODO: 실제 서비스에서는 null 로 바꾸면 진짜 오늘 날짜를 써 (utils 의 getToday 참고)
@@ -17,8 +18,18 @@ export const MOCK_MY_SHIFTS = Object.fromEntries(
   ]),
 );
 
-// 이번 달 예상 급여 (05 달력 대시보드)
-export const MOCK_PAYROLL_SUMMARY = { totalHours: 64, hourlyWage: 12000 };
+// 이번 달 급여 (05 예상 급여 카드, 16 급여 확인) — 계산은 utils/payroll.js
+// 피그마 16 예시 그대로: 최근 근무 3건(9/2, 9/4, 9/5) + 이전 근무 5건(40시간) = 64시간 × 12,000원 = 768,000원
+// TODO: 백엔드가 확정 근무 기록 기준으로 계산해서 주는 걸 가정. 지금은 05 달력의 근무 일정과 따로 놀아.
+export const MOCK_PAYROLL = {
+  hourlyWage: 12000,
+  recentRecords: [
+    { date: '2026-09-02', start: '14:00', end: '22:00' },
+    { date: '2026-09-04', start: '14:00', end: '22:00' },
+    { date: '2026-09-05', start: '14:00', end: '22:00' },
+  ],
+  earlier: { count: 5, hours: 40 },
+};
 
 // (공지 목록은 아래 3단계 MOCK_NOTICES 로 옮겼어)
 
