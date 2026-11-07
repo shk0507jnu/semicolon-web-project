@@ -21,17 +21,24 @@ export default function WorkspaceCreatePage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: 백엔드 워크스페이스 생성 API 연결
-    const created = addWorkspace({
-      name: form.name.trim(),
-      type: form.type,
-      description: form.description.trim(),
-    });
-    selectWorkspace(created.id);
-    // 만들고 나면 새 워크스페이스의 달력으로 이동 (형이 다른 화면을 원하면 여기만 바꾸면 돼)
-    navigate(generatePath(PATHS.calendar, { workspaceId: created.id }));
+    setError(''); setSaving(true);
+    try {
+      const created = await addWorkspace({
+        name: form.name.trim(),
+        type: form.type,
+        description: form.description.trim(),
+      });
+      selectWorkspace(created.id);
+      navigate(generatePath(PATHS.calendar, { workspaceId: created.id }));
+    } catch(e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -72,7 +79,8 @@ export default function WorkspaceCreatePage() {
             onChange={handleChange}
             maxLength={200}
           />
-          <Button type="submit" variant="primary">
+          {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+          <Button type="submit" variant="primary" disabled={saving || !form.name.trim()}>
             워크스페이스 생성
           </Button>
         </form>

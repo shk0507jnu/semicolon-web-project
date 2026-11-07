@@ -1,11 +1,14 @@
 import { FIGMA_ASSETS } from '../../assets';
 import { WEEKDAY_LABELS, getMonthWeeks, parseISODate } from '../../utils/date';
+import { calendarWeeks } from '../../utils/calendarModel.mjs';
 
 // 한 달 달력 (피그마: Calendar / Day 1:71, Weekdays 1:63)
 // - shiftDates: 근무가 있는 날짜 Set → 날짜 아래 파란 점
 // - selectedDate: 선택된 날짜 → 연하늘 배경 + 하늘색 테두리
-export default function MonthCalendar({ year, monthIndex, selectedDate, shiftDates, onSelectDate }) {
-  const weeks = getMonthWeeks(year, monthIndex);
+export default function MonthCalendar({ year, monthIndex, selectedDate, shiftDates, onSelectDate, apiMonth }) {
+  const weeks = apiMonth
+    ? calendarWeeks(apiMonth.days, apiMonth.first_weekday).map(week => week.map(day => day?.date ?? null))
+    : getMonthWeeks(year, monthIndex);
 
   return (
     <div className="flex flex-col gap-3">
@@ -45,7 +48,7 @@ function DayCell({ iso, selected, hasShift, onClick }) {
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      aria-label={`${day}일${hasShift ? ', 근무 있음' : ''}`}
+      aria-label={`${day}일${hasShift ? ', 일정 있음' : ''}`}
       className={`flex h-10 w-[43px] flex-col items-center justify-center gap-[2px] rounded-xl border transition ${
         selected ? 'border-primary bg-primary-soft' : 'border-transparent bg-white hover:bg-canvas'
       }`}

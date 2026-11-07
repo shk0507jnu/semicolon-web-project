@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiSwapCreate } from './ApiSwapPages';
 import { useState } from 'react';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 import DayTimeline from '../../components/calendar/DayTimeline';
@@ -14,7 +16,7 @@ import { formatMonthDayWeekday, getToday, parseISODate, timeToHours } from '../.
 
 // 12 대타 요청 작성 (피그마: 12 대타 요청 작성, 1:52)
 // 06 '내 근무 대타 요청'으로 들어오면 주소에 ?date=2026-09-09 가 붙어서, 그 날 근무가 미리 선택돼.
-export default function SwapCreatePage() {
+function MockSwapCreatePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { workspaceId, eyebrow } = useRouteWorkspace();
@@ -92,4 +94,8 @@ export default function SwapCreatePage() {
       </Button>
     </form>
   );
+}
+
+export default function SwapCreatePage() {
+  return calendarApiEnabled ? <ApiSwapCreate /> : <MockSwapCreatePage />;
 }

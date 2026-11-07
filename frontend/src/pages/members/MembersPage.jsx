@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import ApiMembersPage from './ApiMembersPage';
 import { useState } from 'react';
 import { generatePath } from 'react-router-dom';
 import Button from '../../components/common/Button';
@@ -10,7 +12,7 @@ import { MOCK_INVITE_CODES, MOCK_MEMBERS } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 
 // 09 멤버 관리 (피그마: 09 멤버 관리, 1:52) — 관리자 화면
-export default function MembersPage() {
+function MockMembersPage() {
   const { workspaceId, eyebrow } = useRouteWorkspace();
   // TODO: 백엔드 연결 후 멤버 목록·초대 코드를 API로 받아오기
   const members = MOCK_MEMBERS;
@@ -78,3 +80,5 @@ export default function MembersPage() {
     </div>
   );
 }
+
+export default function MembersPage() { return calendarApiEnabled ? <ApiMembersPage /> : <MockMembersPage />; }

@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiMinStaff } from './ApiSchedulePages';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
@@ -13,7 +15,7 @@ import { MOCK_STAFFING_RULES } from '../../mocks/data';
 import { formatDaysSummary, formatDaysTitle } from '../../utils/staffing';
 
 // 08 최소 근무 인원 설정 (피그마: 08 최소 근무 인원 설정, 1:52) — 관리자 화면
-export default function MinStaffPage() {
+function MockMinStaffPage() {
   const navigate = useNavigate();
   const { eyebrow } = useRouteWorkspace();
 
@@ -78,4 +80,8 @@ export default function MinStaffPage() {
       </p>
     </div>
   );
+}
+
+export default function MinStaffPage() {
+  return calendarApiEnabled ? <ApiMinStaff /> : <MockMinStaffPage />;
 }

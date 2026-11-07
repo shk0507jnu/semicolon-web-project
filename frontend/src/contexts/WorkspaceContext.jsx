@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { calendarApiEnabled, calendarRequest } from '../api/calendar';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_WORKSPACES } from '../mocks/data';
 
 // 워크스페이스 관련 상태를 앱 전체에서 공유해.
@@ -7,8 +8,7 @@ import { MOCK_WORKSPACES } from '../mocks/data';
 //    (하단 메뉴의 '달력', '대타'처럼 워크스페이스가 필요한 화면이 이 값을 보고 이동해)
 // 선택한 워크스페이스는 새로고침해도 유지되게 브라우저(localStorage)에 저장해둬.
 //
-// TODO: 백엔드 API가 나오면 workspaces 는 서버에서 받아오고, addWorkspace 는 생성 API 호출로 바꾸기.
-//       지금은 임시 데이터라 새로 만든 워크스페이스는 새로고침하면 사라져.
+// API 모드에서는 목록과 생성 결과를 DB에 저장하고, 예시 모드에서는 로컬 상태를 사용한다.
 const STORAGE_KEY = 'shiftlink.currentWorkspaceId';
 const WorkspaceContext = createContext(null);
 
@@ -21,7 +21,20 @@ function readStored() {
 }
 
 export function WorkspaceProvider({ children }) {
-  const [workspaces, setWorkspaces] = useState(MOCK_WORKSPACES);
+  const [workspaces, setWorkspaces] = useState(calendarApiEnabled ? [] : MOCK_WORKSPACES);
+  const [loading, setLoading] = useState(calendarApiEnabled);
+  const [error, setError] = useState('');
+  const [revision, setRevision] = useState(0);
+  useEffect(() => {
+    if (!calendarApiEnabled) return;
+    const controller = new AbortController();
+    setLoading(true); setError('');
+    calendarRequest('/workspaces', {signal:controller.signal})
+      .then(result => { if (!controller.signal.aborted) setWorkspaces(result.items); })
+      .catch(e => { if (!controller.signal.aborted) setError(e.message); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [revision]);
   const [currentWorkspaceId, setCurrentWorkspaceId] = useState(readStored);
 
   const selectWorkspace = (id) => {
@@ -34,7 +47,12 @@ export function WorkspaceProvider({ children }) {
   };
 
   // 새 워크스페이스 추가 후 만든 워크스페이스 객체를 돌려줘
-  const addWorkspace = ({ name, type, description }) => {
+  const addWorkspace = async ({ name, type, description }) => {
+    if (calendarApiEnabled) {
+      const workspace = await calendarRequest('/workspaces',{method:'POST',body:{name,type,description}});
+      setWorkspaces(prev => [...prev, workspace]);
+      return workspace;
+    }
     const workspace = {
       id: `ws-${Date.now()}`,
       name,
@@ -58,7 +76,7 @@ export function WorkspaceProvider({ children }) {
 
   return (
     <WorkspaceContext.Provider
-      value={{ workspaces, currentWorkspaceId, currentWorkspace, selectWorkspace, addWorkspace, joinWorkspace }}
+      value={{ loading, error, reload:()=>setRevision(v=>v+1), workspaces, currentWorkspaceId, currentWorkspace, selectWorkspace, addWorkspace, joinWorkspace }}
     >
       {children}
     </WorkspaceContext.Provider>

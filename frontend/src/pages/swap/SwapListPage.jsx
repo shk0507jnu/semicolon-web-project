@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiSwapList } from './ApiSwapPages';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
@@ -19,7 +21,7 @@ const FILTERS = [
 const STATUS_LABEL = { open: '모집 중', applied: '지원 완료', approved: '승인 완료' };
 
 // 11 대타 요청 목록 (피그마: 11 대타 요청 목록, 1:52)
-export default function SwapListPage() {
+function MockSwapListPage() {
   const navigate = useNavigate();
   const { workspaceId, eyebrow } = useRouteWorkspace();
   const { requests, applyToRequest } = useSwaps();
@@ -115,4 +117,8 @@ export default function SwapListPage() {
       </Button>
     </div>
   );
+}
+
+export default function SwapListPage() {
+  return calendarApiEnabled ? <ApiSwapList /> : <MockSwapListPage />;
 }

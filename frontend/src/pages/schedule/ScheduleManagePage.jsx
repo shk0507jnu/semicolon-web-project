@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiScheduleManage } from './ApiSchedulePages';
 import { useState } from 'react';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../components/common/Button';
@@ -22,7 +24,7 @@ function defaultRange(date) {
 
 // 07 근무 배치 관리 (피그마: 07 근무 배치 관리, 1:52) — 관리자 화면
 // 06에서 '근무 배치 수정'으로 들어오면 주소에 ?date=2026-09-09 가 붙어 와.
-export default function ScheduleManagePage() {
+function MockScheduleManagePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { workspaceId, eyebrow } = useRouteWorkspace();
@@ -91,4 +93,8 @@ export default function ScheduleManagePage() {
       </Button>
     </div>
   );
+}
+
+export default function ScheduleManagePage() {
+  return calendarApiEnabled ? <ApiScheduleManage /> : <MockScheduleManagePage />;
 }

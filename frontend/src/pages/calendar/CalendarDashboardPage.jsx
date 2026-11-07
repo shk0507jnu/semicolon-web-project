@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiCalendarDashboard } from './ApiCalendarPages';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import DayTimeline from '../../components/calendar/DayTimeline';
@@ -18,7 +20,7 @@ import { formatMonthDayWeekday, formatWon, getToday, parseISODate } from '../../
 const callName = (name) => (name.length === 3 ? name.slice(1) : name);
 
 // 05 달력 대시보드 (피그마: 05 달력 대시보드, 1:52)
-export default function CalendarDashboardPage() {
+function MockCalendarDashboardPage() {
   const navigate = useNavigate();
   const { workspaceId, eyebrow } = useRouteWorkspace();
 
@@ -94,4 +96,8 @@ export default function CalendarDashboardPage() {
       </Card>
     </div>
   );
+}
+
+export default function CalendarDashboardPage() {
+  return calendarApiEnabled ? <ApiCalendarDashboard /> : <MockCalendarDashboardPage />;
 }

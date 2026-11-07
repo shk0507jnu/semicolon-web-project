@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import { ApiDayDetail } from './ApiCalendarPages';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import DayTimeline from '../../components/calendar/DayTimeline';
 import Button from '../../components/common/Button';
@@ -12,7 +14,7 @@ import { formatMonthDayFullWeekday } from '../../utils/date';
 import { getDayAssignments, getDaySlots, getSlotStatuses } from '../../utils/staffing';
 
 // 06 날짜별 근무 상세 (피그마: 06 날짜별 근무 상세, 1:52)
-export default function DayDetailPage() {
+function MockDayDetailPage() {
   const navigate = useNavigate();
   const { date } = useParams();
   const { workspaceId, eyebrow } = useRouteWorkspace();
@@ -82,4 +84,8 @@ export default function DayDetailPage() {
       )}
     </div>
   );
+}
+
+export default function DayDetailPage() {
+  return calendarApiEnabled ? <ApiDayDetail /> : <MockDayDetailPage />;
 }

@@ -1,3 +1,5 @@
+import { calendarApiEnabled } from '../../api/calendar';
+import ApiState from '../../components/calendar/ApiState';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
@@ -18,7 +20,7 @@ import { PATHS } from '../../routes/paths';
 export default function WorkspaceSelectPage() {
   const navigate = useNavigate();
   // TODO: 백엔드 API 연결 후 workspaces 는 서버에서 받아오기 (WorkspaceContext 참고)
-  const { workspaces, selectWorkspace } = useWorkspace();
+  const { workspaces, selectWorkspace, loading, error, reload } = useWorkspace();
   const [manageMode, setManageMode] = useState(false);
 
   const handleSelect = (workspace) => {
@@ -38,6 +40,7 @@ export default function WorkspaceSelectPage() {
         description="참여 중인 워크스페이스를 선택하세요."
       />
 
+      <ApiState loading={loading} error={error} reload={reload} />
       <Card title={`내 워크스페이스 · ${workspaces.length}`}>
         {manageMode && <Callout tone="info">관리할 워크스페이스를 선택하세요. 관리자인 곳만 선택할 수 있어요.</Callout>}
         {workspaces.map((ws) => {
@@ -68,7 +71,7 @@ export default function WorkspaceSelectPage() {
         {manageMode ? '관리 취소' : '워크스페이스 관리'}
       </Button>
 
-      <InviteJoinCard />
+      {!calendarApiEnabled && <InviteJoinCard />}
     </div>
   );
 }

@@ -14,8 +14,9 @@ const TIME_OPTIONS = Array.from({ length: (24 * 60) / STEP_MINUTES + 1 }, (_, i)
 
 const SELECT_CLASS = 'cursor-pointer appearance-none bg-transparent text-sm leading-5 text-ink outline-none';
 
-export default function TimeRangeField({ label, value, onChange, labelSize = 'sm' }) {
+export default function TimeRangeField({ label, value, onChange, labelSize = 'sm', allowOvernight = false }) {
   const id = useId();
+  const options = [...new Set([...TIME_OPTIONS, value.start, value.end].filter(Boolean))].sort();
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -30,12 +31,12 @@ export default function TimeRangeField({ label, value, onChange, labelSize = 'sm
           onChange={(e) => {
             const start = e.target.value;
             // 시작이 끝과 같거나 늦어지면 끝 시간을 시작 바로 다음 칸으로 밀어줘
-            const end = value.end > start ? value.end : TIME_OPTIONS[TIME_OPTIONS.indexOf(start) + 1];
+            const end = allowOvernight || value.end > start ? value.end : options[options.indexOf(start) + 1];
             onChange({ start, end });
           }}
           className={SELECT_CLASS}
         >
-          {TIME_OPTIONS.slice(0, -1).map((t) => (
+          {options.filter(t => t !== '24:00').map((t) => (
             <option key={t} value={t}>
               {t}
             </option>
@@ -51,7 +52,7 @@ export default function TimeRangeField({ label, value, onChange, labelSize = 'sm
           className={SELECT_CLASS}
         >
           {/* 끝 시간은 시작 시간보다 뒤만 고를 수 있어 */}
-          {TIME_OPTIONS.filter((t) => t > value.start).map((t) => (
+          {options.filter((t) => allowOvernight || t > value.start).map((t) => (
             <option key={t} value={t}>
               {t}
             </option>

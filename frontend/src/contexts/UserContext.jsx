@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { calendarApiEnabled, calendarRequest } from '../api/calendar';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_USER } from '../mocks/data';
 
 // 로그인한 사용자 정보를 앱 전체에서 공유해.
@@ -11,7 +12,16 @@ import { MOCK_USER } from '../mocks/data';
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState(MOCK_USER);
+  const [user, setUser] = useState(calendarApiEnabled ? {name:'로컬 데모',email:'',phone:''} : MOCK_USER);
+
+  useEffect(() => {
+    if (!calendarApiEnabled) return;
+    const controller = new AbortController();
+    calendarRequest('/identity',{signal:controller.signal})
+      .then(me => { if (!controller.signal.aborted) setUser({...me,email:'',phone:''}); })
+      .catch(() => {}); // Calendar/workspace views expose the actionable connection error.
+    return () => controller.abort();
+  }, []);
 
   const updateUser = (changes) => setUser((prev) => ({ ...prev, ...changes }));
 
