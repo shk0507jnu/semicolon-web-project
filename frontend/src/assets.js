@@ -8,4 +8,6 @@ export const FIGMA_ASSETS = {
   appleLogo: '/assets/figma/apple-logo.svg',
   eye: '/assets/figma/eye.svg',                          // 비밀번호 보기/숨기기
   shiftDot: '/assets/figma/shift-dot.svg',               // 달력에서 근무 있는 날 표시 점
+  payrollChevron: '/assets/figma/payroll-chevron.svg',
+  payrollChevronSmall: '/assets/figma/payroll-chevron-small.svg',
 };

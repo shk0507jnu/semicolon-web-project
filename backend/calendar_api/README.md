@@ -65,7 +65,10 @@ Vite의 `/api` 프록시를 사용하므로 개발용 전체 허용 CORS 설정�
 
 - 달력 범위는 원본과 같은 2026–2030년이다. 공휴일은 원본 예시값이며 최신 공식 휴일 자료와의 동기화는 별도 작업이다.
 - `repeat_rule`은 원본처럼 저장만 한다. 반복 일정 자동 전개는 아직 없다.
-- 급여·공지·실제 로그인·회원가입·초대·연락처/시급 수정은 미연동이다. 해당 화면은 예시임을 표시한다.
+- 급여·공지 API는 미연동이다. DB 모드에서는 급여와 공지를 각각 별도 카드로 표시하고, 금액·목록은 연결 준비 상태로 안내한다. 예시 데이터를 실제 DB 데이터처럼 표시하지 않는다.
+- 홈의 급여 카드에서 16 이번 달 급여(`/w/:workspaceId/payroll`)와 18 월별 내역(`/w/:workspaceId/payroll/history`)으로, 공지 카드에서 13 공지 목록(`/w/:workspaceId/notices`)으로 이동한다. 월별 내역의 연도와 월 상세 선택은 URL에 유지된다.
+- `VITE_DATA_SOURCE=mock`으로 실행하면 피그마 화면 확인용 예시 급여·공지를 볼 수 있다. 예시 날짜는 기존 달력과 같은 2026년 9월이며, 카페 워크스페이스에만 표시한다.
+- 실제 로그인·회원가입·초대·연락처/시급 수정은 미연동이다. 해당 화면은 예시임을 표시한다.
 - 자동 배치 최적화/휴가 제약조건은 `shiftopt.db`와의 명시적 직원 ID 매핑이 필요하다. 이번 작업에서 그 DB를 임의로 합치지 않았다.
 - DB 명세 비교: [notion-db-compatibility.md](../../docs/notion-db-compatibility.md)
 
@@ -76,12 +79,12 @@ Vite의 `/api` 프록시를 사용하므로 개발용 전체 허용 CORS 설정�
 ```powershell
 .\.venv\Scripts\python.exe -m pytest backend/calendar_api -q
 cd frontend
-node --test src/utils/calendarModel.test.mjs
+node --test src/utils/calendarModel.test.mjs src/utils/payrollModel.test.mjs
 npm run build -- --configLoader native
 ```
 
 테스트는 임시 DB를 새로 만들며 실행 중인 `calendar.db`를 변경하지 않는다.
 18개 API 테스트: 기존 기능, 워크스페이스 격리, 권한, 저장 지속성, 일괄 저장 실패 시 롤백, 동시 요청, 자정 경계 등.
-5개 프런트 변환 테스트: 요일 시작, 야간/종일 일정, 날짜 경계, 중복 근무자, 시간대 중간 인원 공백.
+11개 프런트 테스트: 달력 변환 5개와 급여 집계·지급 완료 합계·연도 필터·DB/워크스페이스 격리·야간 시간·월 URL 검증 6개.
 
 참고한 공식 문서: [FastAPI SQL 데이터베이스](https://fastapi.tiangolo.com/tutorial/sql-databases/), [Vite 프록시](https://vite.dev/config/server-options#server-proxy).

@@ -14,7 +14,7 @@ import { PATHS } from '../../routes/paths';
 export default function NoticeCreatePage() {
   const navigate = useNavigate();
   const { workspaceId, workspace, eyebrow } = useRouteWorkspace();
-  const { addNotice } = useNotices();
+  const { addNotice, available } = useNotices(workspaceId);
   const [form, setForm] = useState({ title: '', body: '', pinned: false });
 
   const handleChange = (e) => {
@@ -28,6 +28,11 @@ export default function NoticeCreatePage() {
     addNotice({ title: form.title.trim(), body: form.body.trim(), pinned: form.pinned });
     navigate(generatePath(PATHS.notices, { workspaceId }));
   };
+
+  if (!available) return <div className="flex flex-col gap-5 p-4">
+    <PageHeading eyebrow={eyebrow} title="새 공지 작성" description="공지 저장 기능을 준비하고 있어요." />
+    <Button variant="soft" onClick={() => navigate(generatePath(PATHS.notices, { workspaceId }))}>공지 목록으로</Button>
+  </div>;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-4">

@@ -1,4 +1,4 @@
-// 사이트맵 17개 화면의 주소를 한곳에서 관리해.
+// 사이트맵 18개 화면의 주소를 한곳에서 관리해.
 // 페이지에서 주소 문자열을 직접 쓰지 말고 PATHS.xxx 를 쓰면, 나중에 주소가 바뀌어도 여기만 고치면 돼.
 // access: 'public' = 누구나, 'auth' = 로그인 후, 'admin' = 관리자
 
@@ -19,9 +19,10 @@ export const PATHS = {
   noticeDetail: '/w/:workspaceId/notices/:noticeId', // 14
   noticeNew: '/w/:workspaceId/notices/new',          // 15
   payroll: '/w/:workspaceId/payroll',                // 16
+  payrollHistory: '/w/:workspaceId/payroll/history', // 18
   me: '/me',                                         // 17
 };
 
 // 아직 구현하지 않은 화면 목록 (구현하면 App.jsx에 실제 페이지로 연결하고 여기서 빼면 돼)
-// 17개 화면을 모두 구현해서 지금은 비어 있어. 새 화면(예: 비밀번호 찾기)이 생기면 여기에 먼저 추가해.
+// 18개 화면을 모두 구현해서 지금은 비어 있어. 새 화면(예: 비밀번호 찾기)이 생기면 여기에 먼저 추가해.
 export const PENDING_SCREENS = [];

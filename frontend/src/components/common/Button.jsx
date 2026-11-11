@@ -9,6 +9,7 @@ const VARIANTS = {
   soft: 'h-12 border border-line bg-primary-soft text-ink-strong hover:brightness-[0.97]',
   outline: 'h-12 border border-darkblue bg-white text-darkblue hover:bg-primary-soft',
   social: 'h-11 gap-3 border border-line bg-white text-darkblue hover:bg-canvas',
+  secondary: 'h-11 border border-line bg-white text-darkblue hover:bg-primary-soft',
 };
 
 export default function Button({

@@ -21,6 +21,8 @@
   --color-track: #e7edf2;         /* 근무 시간 막대 배경 (피그마 변수 color-track) */
   --color-danger: #b94839;        /* 인원 부족 경고 글씨 (피그마 변수 color-danger) */
   --color-danger-bg: #fff1ed;     /* 인원 부족 경고 배경 (피그마 변수 color-dangerBg) */
+  --color-success: #237451;
+  --color-success-bg: #edf8f1;
 }
 
 body {

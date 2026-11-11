@@ -16,6 +16,7 @@ import NoticeCreatePage from './pages/notice/NoticeCreatePage';
 import NoticeDetailPage from './pages/notice/NoticeDetailPage';
 import NoticeListPage from './pages/notice/NoticeListPage';
 import PayrollPage from './pages/payroll/PayrollPage';
+import PayrollHistoryPage from './pages/payroll/PayrollHistoryPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import MinStaffPage from './pages/schedule/MinStaffPage';
 import ScheduleManagePage from './pages/schedule/ScheduleManagePage';
@@ -74,6 +75,7 @@ export default function App() {
 
               {/* 4단계 */}
               <Route path={PATHS.payroll} element={<PayrollPage />} />
+              <Route path={PATHS.payrollHistory} element={<PayrollHistoryPage />} />
               <Route path={PATHS.me} element={<MyPage />} />
 
               {PENDING_SCREENS.map((screen) => (

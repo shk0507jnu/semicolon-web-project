@@ -14,7 +14,7 @@ import { formatDotDateTime } from '../../utils/date';
 export default function NoticeListPage() {
   const navigate = useNavigate();
   const { workspaceId, eyebrow } = useRouteWorkspace();
-  const { notices } = useNotices();
+  const { notices, available } = useNotices(workspaceId);
   const [query, setQuery] = useState('');
 
   // 제목·본문에 검색어가 들어간 공지만 (대소문자 무시)
@@ -34,6 +34,7 @@ export default function NoticeListPage() {
           type="search"
           placeholder="제목 또는 내용을 입력하세요"
           value={query}
+          disabled={!available}
           onChange={(e) => setQuery(e.target.value)}
         />
       </Card>
@@ -41,7 +42,7 @@ export default function NoticeListPage() {
       <Card title={q ? `검색 결과 · ${filtered.length}` : `전체 공지 · ${filtered.length}`}>
         {filtered.length === 0 ? (
           <p className="text-sm leading-[21px] text-muted">
-            {q ? '검색 결과가 없어요.' : '아직 등록된 공지가 없어요.'}
+            {!available ? '공지 기능을 준비하고 있어요. 연결이 완료되면 이곳에서 팀의 공지를 확인할 수 있어요.' : q ? '검색 결과가 없어요.' : '아직 등록된 공지가 없어요.'}
           </p>
         ) : (
           filtered.map((n) => (
@@ -56,9 +57,10 @@ export default function NoticeListPage() {
       </Card>
 
       {/* TODO: 공지 작성은 관리자만 보이게 (권한 확인 붙일 때) */}
-      <Button variant="primary" onClick={() => navigate(generatePath(PATHS.noticeNew, { workspaceId }))}>
+      <Button variant="primary" disabled={!available} onClick={() => navigate(generatePath(PATHS.noticeNew, { workspaceId }))}>
         + 공지 작성
       </Button>
+      <Button variant="soft" onClick={() => navigate(generatePath(PATHS.calendar, { workspaceId }))}>달력으로 돌아가기</Button>
     </div>
   );
 }

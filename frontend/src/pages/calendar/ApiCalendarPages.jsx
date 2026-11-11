@@ -4,6 +4,7 @@ import { calendarRequest } from '../../api/calendar';
 import ApiState from '../../components/calendar/ApiState';
 import DayTimeline from '../../components/calendar/DayTimeline';
 import MonthCalendar from '../../components/calendar/MonthCalendar';
+import DashboardSections from '../../components/calendar/DashboardSections';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import PageHeading from '../../components/common/PageHeading';
@@ -62,8 +63,8 @@ export function ApiCalendarDashboard() {
         <Button variant="soft" onClick={() => navigate(generatePath(PATHS.dayDetail, { workspaceId, date: selectedDate }))}>근무 상세 보기</Button>
         {me.can_edit && <Button onClick={() => navigate(`${generatePath(PATHS.scheduleManage, { workspaceId })}?date=${selectedDate}`)}>근무 배치 추가</Button>}
       </Card>
-      <Card title="급여 · 공지"><p className="text-sm text-muted">급여와 공지 데이터는 아직 연결되지 않았어요.</p></Card>
     </>}
+    <DashboardSections workspaceId={workspaceId} />
   </div>;
 }
 

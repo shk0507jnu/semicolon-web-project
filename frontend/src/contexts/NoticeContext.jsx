@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { calendarApiEnabled } from '../api/calendar';
 import { MOCK_NOTICES } from '../mocks/data';
 import { nowDateTime } from '../utils/date';
 import { useUser } from './UserContext';
@@ -16,11 +18,13 @@ export const sortByRecent = (notices) => [...notices].sort((a, b) => b.createdAt
 
 export function NoticeProvider({ children }) {
   const { user } = useUser();
-  const [notices, setNotices] = useState(MOCK_NOTICES);
+  const [notices, setNotices] = useState(calendarApiEnabled ? [] : MOCK_NOTICES.map(n => ({ ...n, workspaceId: 'cafe' })));
 
-  const addNotice = ({ title, body, pinned }) => {
+  const addNotice = ({ workspaceId, title, body, pinned }) => {
+    if (calendarApiEnabled) throw new Error('공지 저장 기능을 준비하고 있어요.');
     const notice = {
       id: `n-${Date.now()}`,
+      workspaceId,
       title,
       body,
       pinned,
@@ -35,13 +39,20 @@ export function NoticeProvider({ children }) {
     return notice;
   };
 
-  const markRead = (id) => setNotices((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  const markRead = (id, workspaceId) => setNotices((prev) => prev.map((n) => (n.id === id && n.workspaceId === workspaceId ? { ...n, read: true } : n)));
 
   return <NoticeContext.Provider value={{ notices, addNotice, markRead }}>{children}</NoticeContext.Provider>;
 }
 
-export function useNotices() {
+export function useNotices(workspaceId) {
   const ctx = useContext(NoticeContext);
+  const params = useParams();
   if (!ctx) throw new Error('useNotices는 NoticeProvider 안에서만 쓸 수 있어');
-  return ctx;
+  const id = workspaceId ?? params.workspaceId;
+  return {
+    notices: ctx.notices.filter(n => n.workspaceId === id),
+    available: !calendarApiEnabled,
+    addNotice: values => ctx.addNotice({ ...values, workspaceId: id }),
+    markRead: noticeId => ctx.markRead(noticeId, id),
+  };
 }

@@ -6,15 +6,13 @@ import DayTimeline from '../../components/calendar/DayTimeline';
 import MonthCalendar from '../../components/calendar/MonthCalendar';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
-import ListRow from '../../components/common/ListRow';
+import DashboardSections from '../../components/calendar/DashboardSections';
 import PageHeading from '../../components/common/PageHeading';
 import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
-import { sortByRecent, useNotices } from '../../contexts/NoticeContext';
 import { useUser } from '../../contexts/UserContext';
 import { MOCK_MY_SHIFTS } from '../../mocks/data';
-import { getPayrollSummary } from '../../utils/payroll';
 import { PATHS } from '../../routes/paths';
-import { formatMonthDayWeekday, formatWon, getToday, parseISODate } from '../../utils/date';
+import { formatMonthDayWeekday, getToday, parseISODate } from '../../utils/date';
 
 // '김민수' → '민수' (세 글자 이름이면 성을 빼고 불러줘)
 const callName = (name) => (name.length === 3 ? name.slice(1) : name);
@@ -26,9 +24,6 @@ function MockCalendarDashboardPage() {
 
   // TODO: 백엔드 API 연결 후 아래 임시 데이터를 워크스페이스별 실제 데이터로 바꾸기
   const shifts = MOCK_MY_SHIFTS;
-  const { notices: allNotices } = useNotices();
-  const notices = sortByRecent(allNotices).slice(0, 2); // 최근 공지 2개
-  const { totalHours, totalPay, hourlyWage } = getPayrollSummary();
   const { user } = useUser();
 
   const today = getToday();
@@ -76,24 +71,7 @@ function MockCalendarDashboardPage() {
         </Button>
       </Card>
 
-      {/* 피그마에 16 급여 확인으로 가는 버튼이 없어서, 이 카드를 누르면 이동하게 연결했어 */}
-      <Card title="이번 달 예상 급여" onClick={() => navigate(generatePath(PATHS.payroll, { workspaceId }))}>
-        <p className="text-[28px] leading-[42px] font-bold text-darkblue">{formatWon(totalPay)}</p>
-        <p className="text-sm leading-[21px] text-muted">
-          누적 {totalHours}시간 · 시급 {hourlyWage.toLocaleString('ko-KR')}원 기준
-        </p>
-      </Card>
-
-      <Card title="최근 공지">
-        {notices.map((notice) => (
-          <ListRow
-            key={notice.id}
-            title={notice.title}
-            summary={notice.preview}
-            onClick={() => navigate(generatePath(PATHS.noticeDetail, { workspaceId, noticeId: notice.id }))}
-          />
-        ))}
-      </Card>
+      <DashboardSections workspaceId={workspaceId} />
     </div>
   );
 }
