@@ -54,6 +54,11 @@ def make_app(data_dir):
     def spa(page: str):
         if page == 'api' or page.startswith(('api/', 'assets/')):
             raise HTTPException(404)
+        # Root public files (including the new favicon) must remain available
+        # when Vite is replaced by the bundled local server.
+        public_file = (web / page).resolve()
+        if public_file.is_relative_to(web.resolve()) and public_file.is_file():
+            return FileResponse(public_file)
         return FileResponse(web / 'index.html', headers={'Cache-Control': 'no-cache'})
 
     return app
@@ -143,6 +148,7 @@ def self_test(server, report_path):
         assert len(get(script)) > 1000
         assert len(get('/assets/NotoSansKR.ttf')) > 1000
         assert len(get('/assets/figma/payroll-chevron.svg')) > 0
+        assert b'<svg' in get('/favicon.svg')
         from main import connect
         with connect() as conn:
             conn.execute('CREATE TABLE IF NOT EXISTS desktop_self_test (runs INTEGER NOT NULL)')
