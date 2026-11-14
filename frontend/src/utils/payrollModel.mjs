@@ -35,6 +35,17 @@ export function payrollYearSummary(months, year) {
   return { items, paidCount: paid.length, paidTotal: paid.reduce((sum, m) => sum + m.paidAmount, 0) };
 }
 
+// 18 요약 카드의 조회 기간: '2026년 9–11월' (한 달이면 '2026년 9월', 해가 바뀌면 '2025년 12월–2026년 1월')
+export function payrollPeriodLabel(items) {
+  const months = items.map(m => m.month).filter(isPayrollMonth).sort();
+  if (!months.length) return '';
+  const [first, last] = [months[0], months[months.length - 1]];
+  if (first === last) return payrollMonthLabel(first);
+  const [fy, fm] = first.split('-').map(Number);
+  const [ly, lm] = last.split('-').map(Number);
+  return fy === ly ? `${fy}년 ${fm}–${lm}월` : `${payrollMonthLabel(first)}–${payrollMonthLabel(last)}`;
+}
+
 // Paid amounts come from payment records, never inferred just because a month has ended.
 export function selectPayrollSource({ mode, workspaceId, currentMonth, demoMonths }) {
   return {

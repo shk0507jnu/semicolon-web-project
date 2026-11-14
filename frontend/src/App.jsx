@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import MobileLayout from './components/layout/MobileLayout';
+import { ChatProvider } from './contexts/ChatContext';
 import { NoticeProvider } from './contexts/NoticeContext';
 import { SwapProvider } from './contexts/SwapContext';
 import { UserProvider } from './contexts/UserContext';
@@ -26,14 +27,16 @@ import WorkspaceCreatePage from './pages/workspace/WorkspaceCreatePage';
 import WorkspaceSelectPage from './pages/workspace/WorkspaceSelectPage';
 import { PATHS, PENDING_SCREENS } from './routes/paths';
 
-// 앱 전체에서 공유하는 상태 (사용자, 워크스페이스, 대타 요청, 공지)
+// 앱 전체에서 공유하는 상태 (사용자, 워크스페이스, 대타 요청, 공지, 19 플로팅 채팅)
 // Swap·Notice 는 작성자 이름 때문에 User 를 쓰니까 User 가 가장 바깥에 있어야 해
 function AppProviders({ children }) {
   return (
     <UserProvider>
       <WorkspaceProvider>
         <SwapProvider>
-          <NoticeProvider>{children}</NoticeProvider>
+          <NoticeProvider>
+            <ChatProvider>{children}</ChatProvider>
+          </NoticeProvider>
         </SwapProvider>
       </WorkspaceProvider>
     </UserProvider>

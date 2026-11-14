@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MOCK_PAYROLL_MONTHS } from '../mocks/payroll.js';
-import { isPayrollMonth, paidHours, payrollYearSummary, selectPayrollSource, summarizePayroll } from './payrollModel.mjs';
+import { isPayrollMonth, paidHours, payrollPeriodLabel, payrollYearSummary, selectPayrollSource, summarizePayroll } from './payrollModel.mjs';
 
 test('current month separates completed and scheduled earnings', () => {
   const result = summarizePayroll(MOCK_PAYROLL_MONTHS[0]);
@@ -38,4 +38,11 @@ test('hour calculation handles overnight shifts, minute precision and midnight',
 test('month URL rejects malformed values', () => {
   for (const value of ['2026-13', '2026-00', '2026-1', '', null, '../2026-09']) assert.equal(isPayrollMonth(value), false);
   assert.equal(isPayrollMonth('2026-11'), true);
+});
+
+test('history summary period follows Figma 18 wording', () => {
+  assert.equal(payrollPeriodLabel([{ month: '2026-11' }, { month: '2026-09' }, { month: '2026-10' }]), '2026년 9–11월');
+  assert.equal(payrollPeriodLabel([{ month: '2026-09' }]), '2026년 9월');
+  assert.equal(payrollPeriodLabel([{ month: '2025-12' }, { month: '2026-01' }]), '2025년 12월–2026년 1월');
+  assert.equal(payrollPeriodLabel([]), '');
 });

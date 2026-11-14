@@ -8,7 +8,7 @@ import { useUser } from '../../contexts/UserContext';
 import { useRouteWorkspace } from '../../hooks/useRouteWorkspace';
 import { usePayroll } from '../../hooks/usePayroll';
 import { formatWon } from '../../utils/date';
-import { payrollMonthLabel, payrollYearSummary } from '../../utils/payrollModel.mjs';
+import { payrollMonthLabel, payrollPeriodLabel, payrollYearSummary } from '../../utils/payrollModel.mjs';
 import { PATHS } from '../../routes/paths';
 
 // Figma 18, 1:47. Year/month selection is URL-backed for refresh and browser Back.
@@ -26,7 +26,8 @@ export default function PayrollHistoryPage() {
   return <div className="flex flex-col gap-4 p-4">
     <PageHeading title="월별 급여 내역" description={`${workspace?.name || '워크스페이스'} · ${user.name}`} />
     <PayrollTabs workspaceId={workspaceId} active="history" year={year} />
-    <div className="flex items-center justify-between gap-3">
+    {/* 피그마 18 '기록 없음'(1:129)에는 연도 선택이 없어서, 어느 해에도 내역이 없으면 숨겨 */}
+    {source.months.length > 0 && <div className="flex items-center justify-between gap-3">
       <label className="relative flex h-11 items-center gap-2">
         <span className="sr-only">급여 조회 연도</span>
         <select aria-label="급여 조회 연도" value={year} onChange={e => setSearch({ year: e.target.value })}
@@ -35,13 +36,13 @@ export default function PayrollHistoryPage() {
         </select>
         <img src={FIGMA_ASSETS.payrollChevronSmall} alt="" className="pointer-events-none absolute right-0 rotate-90" />
       </label>
-      <span className="rounded-md bg-white px-2 py-1 text-xs text-muted">{items.length ? `${items.length}개월` : '내역 없음'}</span>
-    </div>
+      <span className="rounded-md bg-white px-2 py-1 text-xs text-muted">{items.length ? `${year === currentYear ? '최근 ' : ''}${items.length}개월` : '내역 없음'}</span>
+    </div>}
     {items.length > 0 ? <>
       <Card tone="soft" className="!gap-2">
         <p className="text-xs text-darkblue">조회 기간 지급 완료</p>
         <p className="text-[28px] leading-[42px] font-bold text-darkblue">{formatWon(paidTotal)}</p>
-        <p className="text-xs leading-[18px] text-muted">{year}년 · 지급 완료 {paidCount}개월</p>
+        <p className="text-xs leading-[18px] text-muted">{payrollPeriodLabel(items)} · 지급 완료 {paidCount}개월</p>
       </Card>
       <Card className="!gap-0">
         {items.map(month => <Link key={month.month} to={`${generatePath(PATHS.payroll, { workspaceId })}?month=${month.month}`}
