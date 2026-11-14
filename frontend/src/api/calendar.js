@@ -1,4 +1,13 @@
-export const calendarApiEnabled = import.meta.env.VITE_DATA_SOURCE === 'api';
+export const desktopPreviewEnabled = import.meta.env.VITE_DESKTOP_PREVIEW === 'true';
+
+function desktopDataSource() {
+  try { return localStorage.getItem('shiftlink.desktopDataSource') || 'api'; }
+  catch { return 'api'; }
+}
+
+export const calendarApiEnabled = desktopPreviewEnabled
+  ? desktopDataSource() !== 'mock'
+  : import.meta.env.VITE_DATA_SOURCE === 'api';
 
 export function demoUserId() {
   try { return localStorage.getItem('shiftlink.demoUserId') || import.meta.env.VITE_CALENDAR_DEMO_USER_ID || '2'; }
