@@ -1,7 +1,9 @@
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useUser } from '../../contexts/UserContext';
+import { useWorkspace } from '../../contexts/WorkspaceContext';
 import { PATHS } from '../../routes/paths';
+import { workspaceNavigation } from '../../utils/workspaceNavigation.mjs';
 import FloatingChat from '../chat/FloatingChat';
 import TopNav from './TopNav';
 
@@ -9,15 +11,17 @@ import TopNav from './TopNav';
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const { user } = useUser();
+  const { workspaces } = useWorkspace();
+  const { workspace } = workspaceNavigation(pathname, workspaces);
   const publicPage = [PATHS.login, PATHS.signup, '/'].includes(pathname);
-  const hasBottomNav = !publicPage && /^(\/workspaces(?:\/|$)|\/w\/|\/me(?:\/|$)|\/invite\/)/.test(pathname);
+  const hasBottomNav = Boolean(workspace);
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
   return (
     <div className="min-h-dvh bg-canvas">
       <div className="mobile-shell mx-auto min-h-dvh w-full max-w-[393px] bg-canvas" data-bottom-nav={hasBottomNav}>
-        <TopNav userName={publicPage ? null : user.name} />
+        <TopNav userName={publicPage ? null : user.name} workspace={workspace} />
         <Outlet />
         <FloatingChat publicPage={publicPage} />
       </div>
