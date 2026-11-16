@@ -1,12 +1,10 @@
-import Logo from '../common/Logo';
 import AuthTabs from './AuthTabs';
 
-// 로그인·회원가입이 같이 쓰는 틀: 로고 + 흰 카드 + 탭 (피그마: Page content, Authentication card)
+// 로그인·회원가입 공통 카드. 로고는 모든 페이지의 고정 상단바에서 제공한다.
 export default function AuthLayout({ children }) {
   return (
-    <main className="flex flex-col items-center px-4 py-6">
+    <main className="flex flex-col items-center px-4 pt-6 pb-24">
       <div className="flex w-full flex-col items-center gap-5">
-        <Logo />
         <section className="w-full overflow-hidden rounded-2xl border border-line bg-white">
           <AuthTabs />
           <div className="px-5 py-6">{children}</div>

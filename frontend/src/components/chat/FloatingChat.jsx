@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { generatePath, useLocation, useNavigate } from 'react-router-dom';
+import { Link, generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { calendarApiEnabled } from '../../api/calendar';
 import { useChat } from '../../contexts/ChatContext';
 import { useNotices } from '../../contexts/NoticeContext';
@@ -9,34 +9,41 @@ import { MOCK_MEMBERS } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 import { getToday } from '../../utils/date';
 import { formatChatDay, formatChatTime, parseNoticeSchedule } from '../../utils/chatSchedule.mjs';
-import { BellIcon, ChatIcon, CheckIcon, CloseIcon, SendIcon } from '../common/Icons';
+import { BellIcon, ChatIcon, ChevronLeftIcon, CloseIcon, SendIcon } from '../common/Icons';
+import ChatRoomList from './ChatRoomList';
 import ScheduleCard from './ScheduleCard';
 
-// 19 플로팅 채팅 (피그마: 19 플로팅 채팅 · 공지 일정 등록, 2:59 ~ 2:709)
-// 워크스페이스 화면(/w/:id/...) 오른쪽 아래 56px 버튼 → 누르면 팀 채팅 패널이 열려.
-//  - 일반: '공지로 보내기' 끔 → 대화만 보내 (02)
-//  - 공지: 켬 → 공지 배지로 보내고, 메시지에서 일정을 찾아 확인 카드를 띄워 (03 → 04)
-//          '일정에 추가'를 눌러야 달력에 저장돼 (05). '달력에서 보기' → 05 달력 해당 날짜 (06)
-// 위치: 오른쪽 16px, 하단 메뉴(64px) 위 16px. 패널은 버튼 위 12px, 좌우 16px.
-const NAV_HEIGHT = 64;
-const LAUNCHER_BOTTOM = NAV_HEIGHT + 16; // 80
-const PANEL_BOTTOM = LAUNCHER_BOTTOM + 56 + 12; // 148
-
-export default function FloatingChat() {
-  // 공통 틀(AppLayout)에서 그려서, 주소(/w/:workspaceId/...)에서 직접 워크스페이스를 꺼내
+// 채팅방 선택은 페이지의 워크스페이스 선택과 독립적이다.
+// 방을 바꾸거나 페이지를 이동해도 ChatContext의 대화·초안은 유지한다.
+export default function FloatingChat({ publicPage = false }) {
   const { pathname } = useLocation();
-  const workspaceId = decodeURIComponent(pathname.match(/^\/w\/([^/]+)/)?.[1] ?? '');
-  const { workspaces } = useWorkspace();
-  const workspace = workspaces.find(ws => String(ws.id) === workspaceId) ?? null;
+  const { workspaces, loading, error, reload } = useWorkspace();
   const { user } = useUser();
-  const { open, setOpen, rooms, updateRoom } = useChat();
+  const { open, setOpen, selectedRoomId, setSelectedRoomId, rooms, updateRoom } = useChat();
+  const [showRooms, setShowRooms] = useState(true);
+  const workspace = workspaces.find(ws => String(ws.id) === String(selectedRoomId)) ?? null;
+  const workspaceId = workspace ? String(workspace.id) : '';
   const room = rooms[workspaceId] ?? { messages: [], unread: 0, draft: '', noticeMode: false };
+  const unread = publicPage ? 0 : workspaces.reduce((sum, ws) => sum + (rooms[ws.id]?.unread ?? 0), 0);
   const panelId = useId();
+  const panelRef = useRef(null);
   const launcherRef = useRef(null);
 
+  const close = () => {
+    setOpen(false);
+    launcherRef.current?.focus();
+  };
+  const selectRoom = id => {
+    setSelectedRoomId(String(id));
+    setShowRooms(false);
+  };
   const toggle = () => {
-    if (!open) updateRoom(workspaceId, { unread: 0 });
-    setOpen(!open);
+    if (open) return close();
+    const routeId = pathname.match(/^\/w\/([^/]+)\//)?.[1];
+    const preferred = workspace ?? workspaces.find(ws => String(ws.id) === routeId);
+    if (preferred) selectRoom(preferred.id);
+    else setShowRooms(true);
+    setOpen(true);
   };
 
   // Esc 로 닫고, 닫으면 포커스를 버튼으로 돌려줘
@@ -52,29 +59,49 @@ export default function FloatingChat() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open, setOpen]);
 
-  // 패널이 열린 채로 다른 워크스페이스에 들어가면 그 방도 읽음 처리
   useEffect(() => {
-    if (open && room.unread) updateRoom(workspaceId, { unread: 0 });
-  }, [open, room.unread, workspaceId, updateRoom]);
-
-  if (!workspace) return null;
+    if (open && !publicPage && !showRooms && workspaceId && room.unread) updateRoom(workspaceId, { unread: 0 });
+  }, [open, publicPage, showRooms, room.unread, workspaceId, updateRoom]);
+  useEffect(() => {
+    if (open && (showRooms || publicPage || !workspace)) panelRef.current?.focus();
+  }, [open, showRooms, publicPage, workspace]);
+  useEffect(() => {
+    if (publicPage) setOpen(false);
+  }, [publicPage, setOpen]);
 
   const label = open
     ? '팀 채팅 닫기'
-    : `팀 채팅 열기${room.unread ? ` (안 읽은 메시지 ${room.unread}개)` : ''}`;
+    : `팀 채팅 열기${unread ? ` (안 읽은 메시지 ${unread}개)` : ''}`;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 mx-auto h-0 w-full max-w-[393px]">
+    <div data-open={open} className="chat-shell pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto h-0 w-full max-w-[393px]">
       {open && (
-        <ChatPanel
+        <section
           id={panelId}
-          workspaceId={workspaceId}
-          workspace={workspace}
-          user={user}
-          room={room}
-          updateRoom={updateRoom}
-          onClose={() => setOpen(false)}
-        />
+          ref={panelRef}
+          role="dialog"
+          tabIndex={-1}
+          aria-label={!publicPage && workspace && !showRooms ? `${workspace.name} 팀 채팅` : '채팅방 목록'}
+          className="chat-panel pointer-events-auto absolute inset-x-4 flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_32px_rgba(7,7,7,0.16)] outline-none"
+        >
+          {publicPage ? (
+            <>
+              <header className="flex shrink-0 items-center justify-between border-b border-line px-4 py-2">
+                <h2 className="font-bold">팀 채팅</h2>
+                <button type="button" className="chat-action" aria-label="채팅창 닫기" onClick={close}><CloseIcon /></button>
+              </header>
+              <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto p-6 text-center">
+                <ChatIcon size={36} className="text-darkblue" />
+                <p className="text-sm leading-6">로그인하고 동료와 대화를 시작하세요.<br />참여 중인 워크스페이스의 채팅방을 선택할 수 있어요.</p>
+                <Link to={PATHS.login} onClick={close} className="rounded-xl bg-darkblue px-5 py-3 text-sm font-bold text-white">로그인하기</Link>
+              </div>
+            </>
+          ) : showRooms || !workspace ? (
+            <ChatRoomList workspaces={workspaces} rooms={rooms} selectedRoomId={selectedRoomId} loading={loading} error={error} reload={reload} onSelect={selectRoom} onClose={close} />
+          ) : (
+            <ChatPanel key={workspaceId} workspaceId={workspaceId} workspace={workspace} user={user} room={room} updateRoom={updateRoom} onClose={close} onShowRooms={() => setShowRooms(true)} />
+          )}
+        </section>
       )}
       <button
         ref={launcherRef}
@@ -83,15 +110,14 @@ export default function FloatingChat() {
         aria-label={label}
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
-        style={{ bottom: LAUNCHER_BOTTOM }}
-        className={`pointer-events-auto absolute right-4 flex size-14 items-center justify-center rounded-[28px] shadow-[0_6px_16px_rgba(23,101,143,0.25)] transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue ${
+        className={`chat-launcher pointer-events-auto absolute right-4 flex size-14 items-center justify-center rounded-[28px] shadow-[0_6px_16px_rgba(23,101,143,0.25)] transition active:scale-95 hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue ${
           open ? 'bg-darkblue text-white' : 'bg-primary text-ink-strong'
         }`}
       >
         {open ? <CloseIcon size={24} /> : <ChatIcon size={24} />}
-        {!open && room.unread > 0 && (
+        {!open && unread > 0 && (
           <span className="absolute top-[-2px] left-[38px] flex size-5 items-center justify-center rounded-[10px] bg-darkblue text-[10px] leading-[15px] font-medium text-white">
-            {room.unread > 9 ? '9+' : room.unread}
+            {unread > 9 ? '9+' : unread}
           </span>
         )}
       </button>
@@ -99,7 +125,7 @@ export default function FloatingChat() {
   );
 }
 
-function ChatPanel({ id, workspaceId, workspace, user, room, updateRoom, onClose }) {
+function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, onShowRooms }) {
   const navigate = useNavigate();
   const { addNotice } = useNotices(workspaceId);
   const inputRef = useRef(null);
@@ -152,20 +178,14 @@ function ChatPanel({ id, workspaceId, workspace, user, room, updateRoom, onClose
   };
 
   return (
-    <section
-      id={id}
-      role="dialog"
-      aria-label={`${workspace.name} 팀 채팅`}
-      style={{ bottom: PANEL_BOTTOM, maxHeight: `calc(100dvh - ${PANEL_BOTTOM + 64 + 16}px)` }}
-      className="pointer-events-auto absolute inset-x-4 flex h-[568px] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_32px_rgba(7,7,7,0.12)]"
-    >
-      {/* 채팅 헤더 (2:860) */}
-      <header className="flex h-16 shrink-0 items-center gap-3 border-b border-line p-4">
-        <ChatIcon size={22} className="text-darkblue" />
-        <div className="min-w-0">
+    <>
+      <header className="flex min-h-16 shrink-0 items-center gap-1 border-b border-line px-2 py-2">
+        <button type="button" onClick={onShowRooms} className="chat-action shrink-0" aria-label="채팅방 선택"><ChevronLeftIcon /></button>
+        <button type="button" onClick={onShowRooms} className="min-w-0 flex-1 rounded-lg text-left focus-visible:outline-2 focus-visible:outline-darkblue" aria-label={`채팅방 변경 · 현재 ${workspace.name}`}>
           <h2 className="truncate text-base leading-6 font-bold text-ink-strong">{workspace.name}</h2>
-          <p className="text-xs leading-[18px] text-muted">팀 채팅 · 멤버 {workspace.memberCount ?? workspace.member_count ?? '-'}명</p>
-        </div>
+          <p className="text-xs leading-[18px] text-muted">멤버 {workspace.memberCount ?? workspace.member_count ?? '-'}명 · 채팅방 변경</p>
+        </button>
+        <button type="button" onClick={onClose} className="chat-action shrink-0" aria-label="채팅창 닫기"><CloseIcon size={20} /></button>
       </header>
 
       {/* 대화 (2:867) — 이 영역만 스크롤 */}
@@ -207,22 +227,14 @@ function ChatPanel({ id, workspaceId, workspace, user, room, updateRoom, onClose
           send();
         }}
       >
-        <label className={`flex h-6 items-center gap-2 ${isAdmin ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}>
+        <label className={`flex min-h-11 items-center gap-2 ${isAdmin ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}>
           <input
             type="checkbox"
-            className="peer sr-only"
+            className="size-5 shrink-0 cursor-inherit accent-darkblue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue"
             checked={noticeMode}
             disabled={!isAdmin}
             onChange={e => updateRoom(workspaceId, { noticeMode: e.target.checked })}
           />
-          <span
-            aria-hidden="true"
-            className={`flex size-5 items-center justify-center rounded-lg border peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-darkblue ${
-              noticeMode ? 'border-darkblue bg-darkblue text-white' : 'border-line bg-white'
-            }`}
-          >
-            {noticeMode && <CheckIcon size={14} />}
-          </span>
           <span className={`text-sm leading-[21px] font-medium ${noticeMode ? 'text-darkblue' : 'text-ink-strong'}`}>공지로 보내기</span>
         </label>
         <p className="text-xs leading-[18px] text-muted">
@@ -251,13 +263,13 @@ function ChatPanel({ id, workspaceId, workspace, user, room, updateRoom, onClose
             type="submit"
             disabled={!canSend}
             aria-label={noticeMode ? '공지 보내기' : '메시지 보내기'}
-            className="flex size-9 shrink-0 items-center justify-center rounded-[18px] bg-primary text-ink-strong transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-track disabled:text-muted disabled:hover:brightness-100"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-ink-strong transition active:scale-95 hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue disabled:cursor-not-allowed disabled:bg-track disabled:text-muted disabled:hover:brightness-100"
           >
             <SendIcon size={18} />
           </button>
         </div>
       </form>
-    </section>
+    </>
   );
 }
 

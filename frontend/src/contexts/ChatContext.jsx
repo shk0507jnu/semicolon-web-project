@@ -3,7 +3,7 @@ import { calendarApiEnabled } from '../api/calendar';
 import { MOCK_CHAT } from '../mocks/chat';
 
 // 19 플로팅 채팅 상태를 앱 전체에서 공유해. (화면을 옮겨 다녀도 대화·작성 중 글이 유지되게)
-//  - open: 채팅 패널이 열렸는지 (워크스페이스 화면 어디서든 같은 버튼)
+//  - open / selectedRoomId: 페이지와 독립적인 패널·채팅방 선택 상태
 //  - 워크스페이스별: messages, draft(작성 중 글 — 채팅을 닫아도 유지), noticeMode('공지로 보내기' 체크), unread
 //  - addedShifts: 채팅 공지에서 '일정에 추가'한 근무 → 05 달력에 바로 보이게
 // API 모드(VITE_DATA_SOURCE=api)에서는 예시 대화를 섞지 않아. 채팅 API가 생기면 여기만 바꾸면 돼.
@@ -18,6 +18,7 @@ const emptyRoom = { messages: [], unread: 0, draft: '', noticeMode: false };
 
 export function ChatProvider({ children }) {
   const [open, setOpen] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [rooms, setRooms] = useState(initialRooms);
   const [addedShifts, setAddedShifts] = useState({});
 
@@ -31,6 +32,8 @@ export function ChatProvider({ children }) {
   const value = useMemo(() => ({
     open,
     setOpen,
+    selectedRoomId,
+    setSelectedRoomId,
     rooms,
     updateRoom,
     addedShifts,
@@ -41,7 +44,7 @@ export function ChatProvider({ children }) {
       setAddedShifts(prev => ({ ...prev, [workspaceId]: { ...prev[workspaceId], [shift.date]: shift } }));
       return true;
     },
-  }), [open, rooms, updateRoom, addedShifts]);
+  }), [open, selectedRoomId, rooms, updateRoom, addedShifts]);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 }

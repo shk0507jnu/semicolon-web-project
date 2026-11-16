@@ -1,37 +1,45 @@
+import { useState } from 'react';
 import { Link, generatePath, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../../contexts/WorkspaceContext';
 import { PATHS } from '../../routes/paths';
+import { CalendarIcon, SwapIcon, UserIcon, WorkspaceIcon } from '../common/Icons';
 
-// 하단 공통 메뉴 (피그마: Bottom navigation, 03 화면 1:85)
-// 달력·대타는 워크스페이스 안의 화면이라, 선택된 워크스페이스가 없으면 워크스페이스 선택으로 보내.
 export default function BottomNav() {
   const { pathname } = useLocation();
-  const { currentWorkspaceId } = useWorkspace();
-
-  const inWorkspace = (path) =>
-    currentWorkspaceId ? generatePath(path, { workspaceId: currentWorkspaceId }) : PATHS.workspaces;
+  const { workspaces, currentWorkspaceId } = useWorkspace();
+  const [tap, setTap] = useState({ key: '', sequence: 0 });
+  const routeId = pathname.match(/^\/w\/([^/]+)\//)?.[1];
+  const workspaceId = workspaces.find(ws => String(ws.id) === routeId)?.id
+    ?? workspaces.find(ws => String(ws.id) === String(currentWorkspaceId))?.id;
+  const inWorkspace = path => workspaceId
+    ? generatePath(path, { workspaceId }) : PATHS.workspaces;
+  const section = pathname.startsWith('/me') ? 'me'
+    : /\/w\/[^/]+\/swaps(?:\/|$)/.test(pathname) ? 'swaps'
+      : /\/w\/[^/]+\/(calendar|schedule|payroll|notices)(?:\/|$)/.test(pathname) ? 'calendar'
+        : 'workspaces';
 
   const items = [
-    // 피그마 04(생성) 화면에서는 하단 메뉴가 모두 회색이라, 03 선택 화면에서만 활성 표시
-    { label: '워크스페이스', to: PATHS.workspaces, active: pathname === PATHS.workspaces },
-    // 피그마 기준: 05 달력·06 근무 상세·07 근무 배치에서만 '달력' 활성 (08 최소 인원, 09 멤버는 모두 회색)
-    { label: '달력', to: inWorkspace(PATHS.calendar), active: /^\/w\/[^/]+\/(calendar(\/[^/]+)?|schedule)$/.test(pathname) },
-    { label: '대타', to: inWorkspace(PATHS.swaps), active: /\/w\/[^/]+\/swaps/.test(pathname) },
-    { label: 'MY', to: PATHS.me, active: pathname.startsWith('/me') },
+    { key: 'workspaces', label: '워크스페이스', to: PATHS.workspaces, Icon: WorkspaceIcon },
+    { key: 'calendar', label: '달력', to: inWorkspace(PATHS.calendar), Icon: CalendarIcon },
+    { key: 'swaps', label: '대타', to: inWorkspace(PATHS.swaps), Icon: SwapIcon },
+    { key: 'me', label: '내 정보', to: PATHS.me, Icon: UserIcon },
   ];
 
   return (
-    <nav className="sticky bottom-0 flex h-16 shrink-0 items-center bg-white px-4">
-      {items.map((item) => (
+    <nav className="bottom-nav" aria-label="주요 메뉴">
+      {items.map(({ key, label, to, Icon }) => (
         <Link
-          key={item.label}
-          to={item.to}
-          aria-current={item.active ? 'page' : undefined}
-          className={`flex h-full flex-1 items-center justify-center text-center text-xs leading-5 font-medium ${
-            item.active ? 'text-darkblue' : 'text-muted'
-          }`}
+          key={key}
+          to={to}
+          aria-current={section === key ? 'page' : undefined}
+          className="bottom-nav-item"
+          onClick={() => setTap(prev => ({ key, sequence: prev.sequence + 1 }))}
         >
-          {item.label}
+          <span className="bottom-nav-indicator">
+            {tap.key === key && <span key={tap.sequence} className="nav-tap-feedback" aria-hidden="true" />}
+            <Icon size={24} />
+          </span>
+          <span className="bottom-nav-label">{label}</span>
         </Link>
       ))}
     </nav>

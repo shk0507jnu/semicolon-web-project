@@ -28,3 +28,128 @@
 body {
   @apply bg-canvas font-sans text-ink antialiased;
 }
+
+/* Fixed chrome shares its dimensions with content and the chat panel. */
+.mobile-shell {
+  --header-height: calc(64px + env(safe-area-inset-top, 0px));
+  --bottom-nav-height: 0px;
+  --bottom-clearance: env(safe-area-inset-bottom, 0px);
+  padding-top: var(--header-height);
+}
+.mobile-shell[data-bottom-nav="true"] {
+  --bottom-nav-height: 76px;
+  --bottom-clearance: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+}
+.top-nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 393px;
+  height: var(--header-height);
+  padding: env(safe-area-inset-top, 0px) 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(16px);
+}
+.app-content {
+  min-height: calc(100dvh - var(--header-height));
+  padding-bottom: calc(var(--bottom-clearance) + 88px);
+}
+.bottom-nav {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 40;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 393px;
+  height: var(--bottom-clearance);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 97%);
+  box-shadow: 0 -4px 20px rgb(23 101 143 / 5%);
+  backdrop-filter: blur(16px);
+}
+.bottom-nav-item {
+  display: flex;
+  min-width: 0;
+  min-height: 56px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: 12px;
+  color: var(--color-muted);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.bottom-nav-indicator {
+  position: relative;
+  display: flex;
+  width: 60px;
+  height: 32px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  transition: background-color 180ms, transform 140ms, color 180ms;
+}
+.bottom-nav-label { font-size: 12px; line-height: 18px; font-weight: 500; white-space: nowrap; }
+.bottom-nav-item[aria-current="page"] { color: var(--color-darkblue); }
+.bottom-nav-item[aria-current="page"] .bottom-nav-indicator { background: #dceffc; }
+.bottom-nav-item[aria-current="page"] .bottom-nav-label { font-weight: 700; }
+.bottom-nav-item[aria-current="page"] svg { stroke-width: 2.3; }
+.bottom-nav-item:active .bottom-nav-indicator { transform: scale(.9); background: #c8e5f8; }
+.bottom-nav-item:focus-visible { outline: 2px solid var(--color-darkblue); outline-offset: -2px; }
+@media (hover: hover) {
+  .bottom-nav-item:hover .bottom-nav-indicator { background: var(--color-primary-soft); }
+  .bottom-nav-item[aria-current="page"]:hover .bottom-nav-indicator { background: #c8e5f8; }
+}
+.nav-tap-feedback {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(23 101 143 / 20%);
+  animation: nav-feedback 420ms ease-out forwards;
+}
+@keyframes nav-feedback { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+.chat-launcher { bottom: calc(var(--bottom-clearance) + 16px); }
+.chat-panel {
+  bottom: calc(var(--bottom-clearance) + 84px);
+  height: 568px;
+  max-height: calc(100dvh - var(--header-height) - var(--bottom-clearance) - 96px);
+  animation: chat-enter 180ms ease-out;
+}
+.chat-action {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: var(--color-darkblue);
+}
+.chat-action:hover { background: var(--color-primary-soft); }
+.chat-action:active { background: #dceffc; transform: scale(.94); }
+.chat-action:focus-visible { outline: 2px solid var(--color-darkblue); outline-offset: -2px; }
+@keyframes chat-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* Make room for the composer in landscape or when the keyboard shrinks the viewport. */
+@media (max-height: 520px) {
+  .chat-panel {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+    height: calc(100dvh - var(--header-height) - env(safe-area-inset-bottom, 0px) - 16px);
+    max-height: none;
+  }
+  .chat-shell[data-open="true"] .chat-launcher { visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-indicator, .chat-launcher { transition: none; }
+  .nav-tap-feedback, .chat-panel { animation: none; }
+  .nav-tap-feedback { display: none; }
+}

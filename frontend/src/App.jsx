@@ -50,7 +50,7 @@ export default function App() {
       <AppProviders>
         <Routes>
           <Route element={<MobileLayout />}>
-            {/* 로그인 전 화면: 상단바·하단 메뉴 없음 */}
+            {/* 모든 화면에 고정 로고·채팅 진입점, 로그인 후 화면에 하단 메뉴 제공 */}
             <Route path="/" element={<Navigate to={PATHS.login} replace />} />
             <Route path={PATHS.login} element={<LoginPage />} />
             <Route path={PATHS.signup} element={<SignupPage />} />

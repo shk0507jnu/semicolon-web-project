@@ -66,3 +66,33 @@ export const CalendarIcon = ({ size = 18, className = '' }) => (
     <path d="M8 3v4M16 3v4M3.5 10h17" />
   </Svg>
 );
+
+export const WorkspaceIcon = ({ size = 24, className = '' }) => (
+  <Svg size={size} className={className}>
+    <rect x="3.5" y="3.5" width="6" height="6" rx="1.5" />
+    <rect x="14.5" y="3.5" width="6" height="6" rx="1.5" />
+    <rect x="3.5" y="14.5" width="6" height="6" rx="1.5" />
+    <rect x="14.5" y="14.5" width="6" height="6" rx="1.5" />
+  </Svg>
+);
+
+export const SwapIcon = ({ size = 24, className = '' }) => (
+  <Svg size={size} className={className}>
+    <path d="M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4" />
+  </Svg>
+);
+
+export const UserIcon = ({ size = 24, className = '' }) => (
+  <Svg size={size} className={className}>
+    <circle cx="12" cy="7.5" r="3.5" />
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+  </Svg>
+);
+
+export const ChevronLeftIcon = ({ size = 24, className = '' }) => (
+  <Svg size={size} className={className}><path d="m14 6-6 6 6 6" /></Svg>
+);
+
+export const ChevronRightIcon = ({ size = 20, className = '' }) => (
+  <Svg size={size} className={className}><path d="m9 6 6 6-6 6" /></Svg>
+);
