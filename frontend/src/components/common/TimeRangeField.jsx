@@ -12,7 +12,7 @@ const TIME_OPTIONS = Array.from({ length: (24 * 60) / STEP_MINUTES + 1 }, (_, i)
   return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
 }); // '00:00' ~ '24:00'
 
-const SELECT_CLASS = 'cursor-pointer appearance-none bg-transparent text-sm leading-5 text-ink outline-none';
+const SELECT_CLASS = 'h-11 min-w-0 flex-1 cursor-pointer appearance-none bg-transparent text-center text-base leading-6 text-ink outline-none focus-visible:ring-2 focus-visible:ring-darkblue rounded-lg';
 
 export default function TimeRangeField({ label, value, onChange, labelSize = 'sm', allowOvernight = false }) {
   const id = useId();

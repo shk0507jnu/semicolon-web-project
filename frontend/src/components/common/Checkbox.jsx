@@ -3,7 +3,7 @@
 // compact: 줄 높이를 글자 높이(18px)에 맞춤 (15 공지 작성처럼 카드 안에 작게 들어갈 때)
 export default function Checkbox({ label, checked, onChange, compact = false, ...props }) {
   return (
-    <label className={`flex cursor-pointer items-center gap-2 ${compact ? 'h-[18px]' : 'h-11'}`}>
+    <label className="flex min-h-11 min-w-0 cursor-pointer items-center gap-2">
       <span className="relative flex size-4 shrink-0">
         <input
           type="checkbox"

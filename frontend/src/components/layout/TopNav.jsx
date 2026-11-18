@@ -5,14 +5,14 @@ import { PATHS } from '../../routes/paths';
 
 // 모든 화면의 고정 상단바. 워크스페이스 내부에서만 현재 공간과 변경 링크를 표시한다.
 // 왼쪽 로고는 확정된 로고 1안(심볼 28px + '시프트링크' 19px). 누르면 워크스페이스 선택으로 가.
-export default function TopNav({ userName, workspace }) {
+export default function TopNav({ userName, workspace, onHome }) {
   return (
     <header className="top-nav">
       <div className="top-nav-main">
         <Link
           to={PATHS.workspaces}
           aria-label="시프트링크 홈 (워크스페이스 선택)"
-          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+          onClick={onHome}
           className="inline-flex min-h-11 items-center rounded-lg transition active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue"
         >
           <Logo size="md" />

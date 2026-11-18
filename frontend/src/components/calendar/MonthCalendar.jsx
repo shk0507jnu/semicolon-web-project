@@ -12,16 +12,16 @@ export default function MonthCalendar({ year, monthIndex, selectedDate, shiftDat
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex h-6 justify-between text-center text-xs leading-[18px] text-muted">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs leading-[18px] text-muted">
         {WEEKDAY_LABELS.map((w) => (
-          <span key={w} className="w-[43px]">
+          <span key={w} className="min-w-0">
             {w}
           </span>
         ))}
       </div>
 
       {weeks.map((week, i) => (
-        <div key={i} className="flex h-10 justify-between">
+        <div key={i} className="grid grid-cols-7 gap-1">
           {week.map((iso, j) =>
             iso ? (
               <DayCell
@@ -32,7 +32,7 @@ export default function MonthCalendar({ year, monthIndex, selectedDate, shiftDat
                 onClick={() => onSelectDate(iso)}
               />
             ) : (
-              <span key={`empty-${j}`} className="h-10 w-[43px]" />
+              <span key={`empty-${j}`} className="h-11 min-w-0" />
             ),
           )}
         </div>
@@ -49,7 +49,7 @@ function DayCell({ iso, selected, hasShift, onClick }) {
       onClick={onClick}
       aria-pressed={selected}
       aria-label={`${day}일${hasShift ? ', 일정 있음' : ''}`}
-      className={`flex h-10 w-[43px] flex-col items-center justify-center gap-[2px] rounded-xl border transition ${
+      className={`flex h-11 w-full min-w-0 flex-col items-center justify-center gap-[2px] rounded-xl border transition ${
         selected ? 'border-primary bg-primary-soft' : 'border-transparent bg-white hover:bg-canvas'
       }`}
     >

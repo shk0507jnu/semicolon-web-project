@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { calendarApiEnabled } from '../../api/calendar';
+import { calendarApiEnabled, calendarRequest } from '../../api/calendar';
 import { useChat } from '../../contexts/ChatContext';
 import { useNotices } from '../../contexts/NoticeContext';
 import { useUser } from '../../contexts/UserContext';
@@ -8,10 +8,12 @@ import { useWorkspace } from '../../contexts/WorkspaceContext';
 import { MOCK_MEMBERS } from '../../mocks/data';
 import { PATHS } from '../../routes/paths';
 import { getToday } from '../../utils/date';
+import { actualToday } from '../../utils/calendarModel.mjs';
 import { formatChatDay, formatChatTime, parseNoticeSchedule } from '../../utils/chatSchedule.mjs';
 import { BellIcon, ChatIcon, ChevronLeftIcon, CloseIcon, SendIcon } from '../common/Icons';
 import ChatRoomList from './ChatRoomList';
 import ScheduleCard from './ScheduleCard';
+import ParsedNoticeCard from './ParsedNoticeCard';
 
 // 채팅방 선택은 페이지의 워크스페이스 선택과 독립적이다.
 // 방을 바꾸거나 페이지를 이동해도 ChatContext의 대화·초안은 유지한다.
@@ -31,7 +33,7 @@ export default function FloatingChat({ publicPage = false }) {
 
   const close = () => {
     setOpen(false);
-    launcherRef.current?.focus();
+    requestAnimationFrame(() => launcherRef.current?.focus({ preventScroll: true }));
   };
   const selectRoom = id => {
     setSelectedRoomId(String(id));
@@ -52,7 +54,7 @@ export default function FloatingChat({ publicPage = false }) {
     const onKey = e => {
       if (e.key === 'Escape') {
         setOpen(false);
-        launcherRef.current?.focus();
+        requestAnimationFrame(() => launcherRef.current?.focus({ preventScroll: true }));
       }
     };
     window.addEventListener('keydown', onKey);
@@ -74,7 +76,7 @@ export default function FloatingChat({ publicPage = false }) {
     : `팀 채팅 열기${unread ? ` (안 읽은 메시지 ${unread}개)` : ''}`;
 
   return (
-    <div data-open={open} className="chat-shell pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto h-0 w-full max-w-[393px]">
+    <div data-open={open} className="chat-shell pointer-events-none absolute inset-x-0 bottom-0 z-50 mx-auto h-0 w-full max-w-[393px]">
       {open && (
         <section
           id={panelId}
@@ -116,7 +118,7 @@ export default function FloatingChat({ publicPage = false }) {
       >
         {open ? <CloseIcon size={24} /> : <ChatIcon size={24} />}
         {!open && unread > 0 && (
-          <span className="absolute top-[-2px] left-[38px] flex size-5 items-center justify-center rounded-[10px] bg-darkblue text-[10px] leading-[15px] font-medium text-white">
+          <span className="absolute top-[-2px] right-[-2px] flex size-5 items-center justify-center rounded-[10px] bg-darkblue text-[10px] leading-[15px] font-medium text-white">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
@@ -127,32 +129,100 @@ export default function FloatingChat({ publicPage = false }) {
 
 function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, onShowRooms }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { addNotice } = useNotices(workspaceId);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
+  const followLatestRef = useRef(true);
   const [composing, setComposing] = useState(false);
+  const parsingRef = useRef(false);
+  const [parserStatus, setParserStatus] = useState(null);
   const isAdmin = workspace.role === '관리자';
   const noticeMode = isAdmin && room.noticeMode;
   const memberNames = calendarApiEnabled ? [] : MOCK_MEMBERS.map(m => m.name);
-  const canSend = room.draft.trim().length > 0;
+  const pending = room.messages.some(message => ['loading', 'saving'].includes(message.parser?.status));
+  const canSend = room.draft.trim().length > 0 && !pending;
+  const today = calendarApiEnabled ? actualToday() : getToday();
+  const routeDate = location.pathname === generatePath(PATHS.calendar, { workspaceId })
+    ? new URLSearchParams(location.search).get('date') : null;
+  const referenceDate = /^\d{4}-\d{2}-\d{2}$/.test(routeDate ?? '') ? routeDate : today;
   const last = room.messages[room.messages.length - 1];
   const showNoticeHint = noticeMode && last?.kind !== 'notice';
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+  useEffect(() => {
+    if (!calendarApiEnabled) return undefined;
+    const controller = new AbortController();
+    calendarRequest('/notice-parser/status', { workspaceId, signal: controller.signal })
+      .then(setParserStatus).catch(() => {});
+    return () => controller.abort();
+  }, [workspaceId]);
   // 새 메시지·카드가 생기면 맨 아래로
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [room.messages.length, showNoticeHint, last?.schedule?.status]);
+    if (el) {
+      followLatestRef.current = true;
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [room.messages.length, showNoticeHint, last?.schedule?.status, last?.parser?.status]);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return undefined;
+    const observer = new ResizeObserver(() => {
+      if (followLatestRef.current) el.scrollTop = el.scrollHeight;
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const updateParser = (messageId, patch) => updateRoom(workspaceId, r => ({
+    messages: r.messages.map(m => m.id === messageId ? { ...m, parser: { ...m.parser, ...patch } } : m),
+  }));
+
+  const analyze = async (messageId, text, baseDate) => {
+    if (parsingRef.current) return;
+    parsingRef.current = true;
+    updateParser(messageId, { status: 'loading', referenceDate: baseDate, result: null, error: null });
+    try {
+      const result = await calendarRequest('/notice-parser/preview', {
+        workspaceId, method: 'POST', body: { text, reference_date: baseDate },
+      });
+      updateParser(messageId, { status: 'review', result });
+    } catch (error) {
+      updateParser(messageId, { status: 'error', error: error.message });
+    } finally {
+      parsingRef.current = false;
+    }
+  };
+
+  const confirm = async message => {
+    if (parsingRef.current || pending) return;
+    parsingRef.current = true;
+    updateParser(message.id, { status: 'saving', error: null });
+    try {
+      await calendarRequest(`/notice-parser/previews/${message.parser.result.id}/confirm`, { workspaceId, method: 'POST' });
+      updateParser(message.id, { status: 'saved' });
+      window.dispatchEvent(new CustomEvent('shiftlink:calendar-updated', { detail: { workspaceId } }));
+    } catch (error) {
+      updateParser(message.id, { status: 'review', error: error.message });
+    } finally {
+      parsingRef.current = false;
+    }
+  };
 
   const send = () => {
     const text = room.draft.trim();
-    if (!text) return;
-    const base = { id: `c-${Date.now()}`, author: user.name, mine: true, time: formatChatTime(), text };
+    if (!text || pending || parsingRef.current) return;
+    const base = { id: `c-${crypto.randomUUID()}`, author: user.name, mine: true, time: formatChatTime(), text };
     if (!noticeMode) {
       updateRoom(workspaceId, r => ({ messages: [...r.messages, { ...base, kind: 'text' }], draft: '' }));
+      return;
+    }
+    if (calendarApiEnabled) {
+      updateRoom(workspaceId, r => ({ messages: [...r.messages, { ...base, kind: 'notice', parser: { status: 'loading', referenceDate } }], draft: '' }));
+      analyze(base.id, text, referenceDate);
       return;
     }
     const parsed = parseNoticeSchedule(text, { today: getToday(), memberNames, fallbackName: user.name });
@@ -179,7 +249,7 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
 
   return (
     <>
-      <header className="flex min-h-16 shrink-0 items-center gap-1 border-b border-line px-2 py-2">
+      <header className="chat-room-header flex min-h-16 shrink-0 items-center gap-1 border-b border-line px-2 py-2">
         <button type="button" onClick={onShowRooms} className="chat-action shrink-0" aria-label="채팅방 선택"><ChevronLeftIcon /></button>
         <button type="button" onClick={onShowRooms} className="min-w-0 flex-1 rounded-lg text-left focus-visible:outline-2 focus-visible:outline-darkblue" aria-label={`채팅방 변경 · 현재 ${workspace.name}`}>
           <h2 className="truncate text-base leading-6 font-bold text-ink-strong">{workspace.name}</h2>
@@ -189,16 +259,30 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
       </header>
 
       {/* 대화 (2:867) — 이 영역만 스크롤 */}
-      <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4" aria-live="polite">
-        <p className="text-center text-[10px] leading-[15px] font-medium text-muted">{formatChatDay(getToday())}</p>
+      <div ref={scrollRef} onScroll={e => {
+        const el = e.currentTarget;
+        followLatestRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 32;
+      }} className="chat-messages flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain p-4" aria-live="polite">
+        <p className="text-center text-[10px] leading-[15px] font-medium text-muted">{formatChatDay(today)}</p>
         {room.messages.length === 0 && (
           <p className="py-6 text-center text-sm leading-[21px] text-muted">
             아직 대화가 없어요.<br />동료에게 첫 메시지를 보내 보세요.
           </p>
         )}
         {room.messages.map(message => (
-          <div key={message.id} className="flex flex-col gap-3">
+          <div key={message.id} className="min-w-0 shrink-0 flex flex-col gap-3">
             <Message message={message} />
+            {message.parser && <ParsedNoticeCard
+              parser={message.parser}
+              workspaceName={workspace.name}
+              onRetry={() => { if (!pending) analyze(message.id, message.text, message.parser.referenceDate); }}
+              onEdit={() => {
+                updateRoom(workspaceId, { draft: message.text, noticeMode: true });
+                inputRef.current?.focus();
+              }}
+              onConfirm={() => confirm(message)}
+              onOpenCalendar={openCalendar}
+            />}
             {message.schedule && (
               <ScheduleCard
                 schedule={message.schedule}
@@ -215,13 +299,17 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
           <div className="flex flex-col gap-1 rounded-2xl border border-line bg-primary-soft p-3">
             <p className="text-sm leading-[21px] font-medium text-darkblue">공지에서 일정을 정리해 드려요</p>
             <p className="text-xs leading-[18px] text-muted">날짜, 근무자, 시간을 함께 적어 주세요.</p>
+            {calendarApiEnabled && <>
+              <p className="text-xs leading-[18px] text-muted">예) 홍길동 11월 29일 13시~15시 근무<br />여러 일정은 한 줄에 한 명씩 입력해 주세요.</p>
+              <p className="text-xs leading-[18px] text-muted">{parserStatus?.gemini_available ? '휴가·선호·제외·횟수 조건도 분석할 수 있어요.' : '현재 날짜·시간 규칙 파서로 테스트할 수 있어요. 휴가·근무 조건 분석은 서버 API 키가 필요해요.'}</p>
+            </>}
           </div>
         )}
       </div>
 
       {/* 입력 (2:888 일반 / 2:924 공지) */}
       <form
-        className="flex shrink-0 flex-col gap-2 border-t border-line p-4"
+        className="chat-composer flex shrink-0 flex-col gap-2 border-t border-line p-3"
         onSubmit={e => {
           e.preventDefault();
           send();
@@ -237,13 +325,14 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
           />
           <span className={`text-sm leading-[21px] font-medium ${noticeMode ? 'text-darkblue' : 'text-ink-strong'}`}>공지로 보내기</span>
         </label>
-        <p className="text-xs leading-[18px] text-muted">
-          {!isAdmin ? '공지는 관리자만 보낼 수 있어요.' : noticeMode ? '공지 메시지에서 근무 일정을 찾아요.' : '일반 메시지로 전송해요.'}
+        <p className="chat-composer-hint text-xs leading-[18px] text-muted">
+          {!isAdmin ? '공지는 관리자만 보낼 수 있어요.' : noticeMode ? `분석 후 확인해서 저장 · 기준일 ${referenceDate}` : '일반 메시지로 전송해요.'}
         </p>
-        <div className="flex items-center gap-3 rounded-xl border border-line bg-canvas p-3 focus-within:border-darkblue">
+        <div className="chat-input-row flex min-w-0 items-end gap-2 rounded-xl border border-line bg-canvas p-2 focus-within:border-darkblue">
           <textarea
             ref={inputRef}
             rows={1}
+            maxLength={2000}
             value={room.draft}
             aria-label={noticeMode ? '공지 내용' : '메시지'}
             placeholder={noticeMode ? '공지 내용을 입력해 주세요' : '동료에게 메시지를 보내세요'}
@@ -257,7 +346,7 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
                 send();
               }
             }}
-            className="field-sizing-content max-h-24 min-h-10 min-w-0 flex-1 resize-none bg-transparent py-[11px] text-xs leading-[18px] text-ink-strong outline-none placeholder:text-muted"
+            className="field-sizing-content max-h-24 min-h-11 min-w-0 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-ink-strong outline-none placeholder:text-muted"
           />
           <button
             type="submit"
@@ -277,13 +366,13 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
 function Message({ message }) {
   const { mine, kind } = message;
   return (
-    <div className={`flex flex-col gap-1 ${mine ? 'items-end' : 'items-start'}`}>
-      <div className="flex items-center gap-2 text-muted">
-        <span className="text-xs leading-[18px]">
+    <div className={`flex min-w-0 flex-col gap-1 ${mine ? 'items-end' : 'items-start'}`}>
+      <div className="flex max-w-full items-baseline gap-2 text-muted">
+        <span className="min-w-0 text-xs leading-[18px]">
           {message.author}
           {message.role === '관리자' ? ' · 관리자' : ''}
         </span>
-        <span className="text-[10px] leading-[15px] font-medium">{message.time}</span>
+        <span className="shrink-0 text-[10px] leading-[15px] font-medium">{message.time}</span>
       </div>
       <div
         className={`flex max-w-full flex-col gap-2 rounded-xl p-3 ${mine ? 'bg-primary-soft' : 'bg-canvas'} ${

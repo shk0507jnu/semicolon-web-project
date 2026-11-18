@@ -118,7 +118,7 @@ function RulesForm({ workspaceId, initialRules }) {
     </Card>
     <Card title="등록할 규칙">
       {!rules.length && <p className="text-sm text-muted">규칙을 추가해주세요.</p>}
-      {rules.map((r,i)=><div key={i} className="flex items-center gap-2"><ListRow title={`${r.days.join('·')} ${r.start}–${r.end}`} summary={`최소 ${r.min}명`} onClick={()=>{setEditing(i);setDays(r.days);setRange({start:r.start,end:r.end});setMin(r.min);}} /><button type="button" aria-label={`${i+1}번 규칙 삭제`} onClick={()=>{setRules(prev=>prev.filter((_,n)=>n!==i));setEditing(null);setMessage('변경 내용을 저장해주세요.');}} className="shrink-0 text-xs text-muted">삭제</button></div>)}
+      {rules.map((r,i)=><div key={i} className="flex items-center gap-2"><ListRow title={`${r.days.join('·')} ${r.start}–${r.end}`} summary={`최소 ${r.min}명`} onClick={()=>{setEditing(i);setDays(r.days);setRange({start:r.start,end:r.end});setMin(r.min);}} /><button type="button" aria-label={`${i+1}번 규칙 삭제`} onClick={()=>{setRules(prev=>prev.filter((_,n)=>n!==i));setEditing(null);setMessage('변경 내용을 저장해주세요.');}} className="min-h-11 min-w-11 shrink-0 rounded-lg text-xs text-muted hover:bg-canvas focus-visible:outline-2 focus-visible:outline-darkblue">삭제</button></div>)}
     </Card>
     {message && <p role="status" className="text-sm text-muted">{message}</p>}
     <Button disabled={busy || editing!==null} onClick={save}>{busy ? '저장 중…' : '규칙 저장'}</Button>

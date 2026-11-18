@@ -13,13 +13,13 @@ export default function TextField({ label, id, trailing, labelSize = 'md', class
       <label htmlFor={inputId} className={LABEL_CLASS[labelSize]}>
         {label}
       </label>
-      <div className="relative w-full">
+      <div className="relative w-full min-w-0">
         <input
           id={inputId}
-          className={`h-12 leading-5 ${INPUT_BASE_CLASS} ${trailing ? 'pr-12' : ''}`}
+          className={`h-12 leading-5 ${INPUT_BASE_CLASS} ${trailing ? 'pr-14' : ''}`}
           {...inputProps}
         />
-        {trailing && <div className="absolute inset-y-0 right-3 flex items-center">{trailing}</div>}
+        {trailing && <div className="absolute inset-y-0 right-1 flex items-center">{trailing}</div>}
       </div>
     </div>
   );

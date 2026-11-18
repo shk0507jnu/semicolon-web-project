@@ -5,11 +5,11 @@
 //  - social : 흰 배경 + 회색 테두리, 아이콘과 함께 쓰는 간편 로그인 버튼
 //  - soft   : 연하늘 배경 + 회색 테두리 보조 버튼 (예: 워크스페이스 관리)
 const VARIANTS = {
-  primary: 'h-12 bg-primary text-ink hover:brightness-95',
-  soft: 'h-12 border border-line bg-primary-soft text-ink-strong hover:brightness-[0.97]',
-  outline: 'h-12 border border-darkblue bg-white text-darkblue hover:bg-primary-soft',
-  social: 'h-11 gap-3 border border-line bg-white text-darkblue hover:bg-canvas',
-  secondary: 'h-11 border border-line bg-white text-darkblue hover:bg-primary-soft',
+  primary: 'min-h-12 bg-primary text-ink hover:brightness-95',
+  soft: 'min-h-12 border border-line bg-primary-soft text-ink-strong hover:brightness-[0.97]',
+  outline: 'min-h-12 border border-darkblue bg-white text-darkblue hover:bg-primary-soft',
+  social: 'min-h-11 gap-3 border border-line bg-white text-darkblue hover:bg-canvas',
+  secondary: 'min-h-11 border border-line bg-white text-darkblue hover:bg-primary-soft',
 };
 
 export default function Button({
@@ -23,7 +23,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`flex w-full items-center justify-center rounded-xl px-4 text-sm leading-5 font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
+      className={`flex w-full min-w-0 items-center justify-center rounded-xl px-4 py-2 text-sm leading-5 font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-darkblue disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
       {...props}
     >
       {icon && <img src={icon} alt="" className="size-[18px] shrink-0" />}

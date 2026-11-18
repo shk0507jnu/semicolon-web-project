@@ -13,7 +13,7 @@ export default function TextAreaField({ label, id, labelSize = 'md', className =
       </label>
       <textarea
         id={textareaId}
-        className={`h-[120px] resize-none py-0 leading-[21px] ${INPUT_BASE_CLASS}`}
+        className={`h-[120px] resize-none py-3 leading-6 ${INPUT_BASE_CLASS}`}
         {...textareaProps}
       />
     </div>

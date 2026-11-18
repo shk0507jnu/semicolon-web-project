@@ -60,10 +60,10 @@ export default function LoginPage() {
           required
         />
 
-        <div className="flex h-11 items-center justify-between">
+        <div className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1">
           <Checkbox label="로그인 유지" name="remember" checked={form.remember} onChange={handleChange} />
           {/* TODO: 비밀번호 찾기 화면은 사이트맵에 없어서 형한테 확인 필요 */}
-          <button type="button" className="text-xs leading-5 font-medium text-darkblue underline">
+          <button type="button" className="min-h-11 shrink-0 text-xs leading-5 font-medium text-darkblue underline">
             비밀번호 찾기
           </button>
         </div>

@@ -8,4 +8,4 @@ export const LABEL_CLASS = {
 };
 
 export const INPUT_BASE_CLASS =
-  'w-full rounded-xl border border-line bg-canvas px-3 text-sm text-ink outline-none transition placeholder:text-muted focus:border-darkblue focus:bg-white';
+  'w-full min-w-0 rounded-xl border border-line bg-canvas px-3 text-base text-ink outline-none transition placeholder:text-muted focus:border-darkblue focus:bg-white';

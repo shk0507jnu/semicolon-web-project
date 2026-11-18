@@ -94,9 +94,9 @@ export default function SignupPage() {
           가입하기
         </Button>
 
-        <div className="flex h-11 items-center justify-center gap-2">
+        <div className="flex min-h-11 flex-wrap items-center justify-center gap-x-2 gap-y-1">
           <span className="text-xs leading-5 text-muted">이미 계정이 있나요?</span>
-          <Link to={PATHS.login} replace className="text-sm leading-5 font-medium text-darkblue underline">
+          <Link to={PATHS.login} replace className="inline-flex min-h-11 items-center text-sm leading-5 font-medium text-darkblue underline">
             로그인
           </Link>
         </div>

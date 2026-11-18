@@ -8,7 +8,7 @@ export default function WeekdayPicker({ value, onChange }) {
   };
 
   return (
-    <div role="group" aria-label="요일 선택" className="flex h-10 justify-between">
+    <div role="group" aria-label="요일 선택" className="grid grid-cols-7 gap-1">
       {WEEKDAY_ORDER.map((day) => {
         const selected = value.includes(day);
         return (
@@ -17,7 +17,7 @@ export default function WeekdayPicker({ value, onChange }) {
             type="button"
             aria-pressed={selected}
             onClick={() => toggle(day)}
-            className={`flex h-10 w-[41px] items-center justify-center rounded-lg text-sm leading-[21px] font-medium text-ink-strong transition ${
+            className={`flex h-11 w-full min-w-0 items-center justify-center rounded-lg text-sm leading-[21px] font-medium text-ink-strong transition ${
               selected ? 'bg-primary' : 'bg-canvas hover:bg-line'
             }`}
           >

@@ -20,6 +20,7 @@ from typing import Literal, Optional
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Response
 from pydantic import BaseModel, Field
 from workspaces import migrate_workspaces
+from notice_parser import create_parser_router, init_parser_db
 
 DB_PATH = os.environ.get(
     "CALENDAR_DB",
@@ -95,6 +96,7 @@ def init_db() -> None:
             conn.execute("ALTER TABLE events ADD COLUMN user_id INTEGER REFERENCES users(id)")
         conn.commit()
         migrate_workspaces(conn)
+        init_parser_db(conn)
     finally:
         conn.close()
 
@@ -148,6 +150,9 @@ def require_editor(user=Depends(current_member)):
 
 def get_today() -> date:  # 테스트에서 덮어쓸 수 있도록 의존성으로 분리
     return date.today()
+
+
+app.include_router(create_parser_router(get_conn, current_member, require_editor))
 
 
 # ───────────────────────── 스키마 ─────────────────────────

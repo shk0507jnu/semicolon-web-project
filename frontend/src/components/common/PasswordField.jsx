@@ -17,7 +17,7 @@ export default function PasswordField(props) {
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? '비밀번호 숨기기' : '비밀번호 보기'}
           aria-pressed={visible}
-          className="flex items-center justify-center"
+          className="flex size-11 items-center justify-center rounded-lg focus-visible:outline-2 focus-visible:outline-darkblue"
         >
           <img
             src={FIGMA_ASSETS.eye}

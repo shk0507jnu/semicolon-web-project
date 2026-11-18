@@ -25,16 +25,28 @@
   --color-success-bg: #edf8f1;
 }
 
+html, body, #root { height: 100%; }
 body {
   @apply bg-canvas font-sans text-ink antialiased;
+  overflow: hidden;
 }
 
 /* Fixed chrome shares its dimensions with content and the chat panel. */
 .mobile-shell {
+  position: fixed;
+  inset-inline: 0;
+  top: var(--viewport-top, 0px);
+  height: var(--viewport-height, 100dvh);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
   --header-height: calc(64px + env(safe-area-inset-top, 0px));
   --bottom-nav-height: 0px;
   --bottom-clearance: env(safe-area-inset-bottom, 0px);
+  --chat-dock-height: calc(3.5rem + 24px);
   padding-top: var(--header-height);
+  padding-bottom: calc(var(--bottom-clearance) + var(--chat-dock-height));
 }
 .mobile-shell[data-bottom-nav="true"] {
   --header-height: calc(112px + env(safe-area-inset-top, 0px));
@@ -42,7 +54,7 @@ body {
   --bottom-clearance: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
 }
 .top-nav {
-  position: fixed;
+  position: absolute;
   inset: 0 0 auto;
   z-index: 40;
   margin-inline: auto;
@@ -72,12 +84,21 @@ body {
   gap: 12px;
   border-top: 1px solid var(--color-line);
 }
-.app-content {
-  min-height: calc(100dvh - var(--header-height));
-  padding-bottom: calc(var(--bottom-clearance) + 88px);
+.page-scroll {
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-padding-block: 16px;
+  scrollbar-width: thin;
 }
+.app-content > main { min-width: 0; flex: 1 0 auto; }
+.app-content > :not(main) { flex-shrink: 0; }
+.page-scroll fieldset { min-inline-size: 0; }
 .bottom-nav {
-  position: fixed;
+  position: absolute;
   inset: auto 0 0;
   z-index: 40;
   margin-inline: auto;
@@ -135,13 +156,16 @@ body {
   animation: nav-feedback 420ms ease-out forwards;
 }
 @keyframes nav-feedback { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
-.chat-launcher { bottom: calc(var(--bottom-clearance) + 16px); }
+.chat-launcher { bottom: calc(var(--bottom-clearance) + 12px); }
+.chat-shell[data-open="true"] .chat-launcher { visibility: hidden; }
 .chat-panel {
-  bottom: calc(var(--bottom-clearance) + 84px);
+  bottom: calc(var(--bottom-clearance) + 8px);
   height: 568px;
-  max-height: calc(100dvh - var(--header-height) - var(--bottom-clearance) - 96px);
+  max-height: calc(var(--viewport-height, 100dvh) - var(--header-height) - var(--bottom-clearance) - 16px);
   animation: chat-enter 180ms ease-out;
 }
+.chat-messages > * { flex-shrink: 0; }
+.chat-messages { scroll-padding-block: 12px; }
 .chat-action {
   display: inline-flex;
   min-width: 44px;
@@ -155,15 +179,32 @@ body {
 .chat-action:active { background: #dceffc; transform: scale(.94); }
 .chat-action:focus-visible { outline: 2px solid var(--color-darkblue); outline-offset: -2px; }
 @keyframes chat-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-/* Make room for the composer in landscape or when the keyboard shrinks the viewport. */
-@media (max-height: 520px) {
-  .chat-panel {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
-    height: calc(100dvh - var(--header-height) - env(safe-area-inset-bottom, 0px) - 16px);
-    max-height: none;
-  }
-  .chat-shell[data-open="true"] .chat-launcher { visibility: hidden; }
+/* The visual viewport also detects keyboards which do not trigger media queries. */
+.mobile-shell[data-compact="true"] {
+  --header-height: calc(56px + env(safe-area-inset-top, 0px));
+  --chat-dock-height: 64px;
 }
+.mobile-shell[data-compact="true"] .top-nav-main { height: 56px; }
+.mobile-shell[data-compact="true"] .workspace-context-bar { display: none; }
+.mobile-shell[data-compact="true"] .chat-launcher { width: 48px; height: 48px; bottom: calc(var(--bottom-clearance) + 8px); }
+.mobile-shell[data-compact="true"] .chat-panel {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  height: calc(var(--viewport-height, 100dvh) - var(--header-height) - env(safe-area-inset-bottom, 0px) - 16px);
+  max-height: none;
+}
+.mobile-shell[data-compact="true"]:has(.chat-shell[data-open="true"]) .bottom-nav { visibility: hidden; }
+.mobile-shell[data-compact="true"] .chat-room-header { min-height: 52px; padding-block: 4px; }
+.mobile-shell[data-compact="true"] .chat-room-header p { display: none; }
+.mobile-shell[data-compact="true"] .chat-composer { padding: 8px; gap: 4px; }
+.mobile-shell[data-compact="true"] .chat-composer-hint { display: none; }
+.mobile-shell[data-compact="true"] .chat-input-row { padding-block: 4px; }
+.mobile-shell[data-compact="true"] .chat-composer textarea { max-height: 68px; }
+.mobile-shell[data-tight="true"] .chat-composer { padding-block: 6px; }
+.mobile-shell[data-tight="true"] .chat-input-row { padding-block: 0; }
+.mobile-shell[data-tight="true"] .chat-composer textarea { max-height: 44px; }
+.mobile-shell[data-keyboard="true"] { --bottom-clearance: env(safe-area-inset-bottom, 0px); --chat-dock-height: 0px; }
+.mobile-shell[data-keyboard="true"] .bottom-nav,
+.mobile-shell[data-keyboard="true"] .chat-launcher { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .bottom-nav-indicator, .chat-launcher { transition: none; }
   .nav-tap-feedback, .chat-panel { animation: none; }

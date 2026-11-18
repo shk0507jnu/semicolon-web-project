@@ -46,12 +46,12 @@ export function ApiCalendarDashboard() {
     {calendar && <>
       <Card>
         <div className="flex items-center justify-between gap-3">
-          <button type="button" aria-label="이전 달" disabled={!calendar.prev} onClick={() => move(calendar.prev)} className="size-9 rounded-lg bg-canvas disabled:opacity-30">‹</button>
+          <button type="button" aria-label="이전 달" disabled={!calendar.prev} onClick={() => move(calendar.prev)} className="size-11 shrink-0 rounded-lg bg-canvas disabled:opacity-30">‹</button>
           <h2 className="text-base font-bold text-ink-strong">{calendar.title}</h2>
-          <button type="button" aria-label="다음 달" disabled={!calendar.next} onClick={() => move(calendar.next)} className="size-9 rounded-lg bg-canvas disabled:opacity-30">›</button>
+          <button type="button" aria-label="다음 달" disabled={!calendar.next} onClick={() => move(calendar.next)} className="size-11 shrink-0 rounded-lg bg-canvas disabled:opacity-30">›</button>
         </div>
-        <label className="flex items-center justify-between text-xs text-muted">월 선택
-          <input type="month" aria-label="월 선택" value={`${year}-${String(month).padStart(2,'0')}`} min="2026-01" max="2030-12" onChange={e => e.target.value && chooseDate(`${e.target.value}-01`)} className="rounded-lg border border-line px-2 py-1" />
+        <label className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">월 선택
+          <input type="month" aria-label="월 선택" value={`${year}-${String(month).padStart(2,'0')}`} min="2026-01" max="2030-12" onChange={e => e.target.value && chooseDate(`${e.target.value}-01`)} className="min-h-11 min-w-0 max-w-full rounded-lg border border-line px-2 py-1 text-base" />
         </label>
         <MonthCalendar apiMonth={calendar} year={year} monthIndex={month-1} selectedDate={selectedDate}
           shiftDates={new Set(calendar.days.filter(d => d.has_event).map(d => d.date))} onSelectDate={chooseDate} />

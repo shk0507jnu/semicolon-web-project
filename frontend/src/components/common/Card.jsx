@@ -7,7 +7,7 @@ export default function Card({ title, tone = 'white', onClick, children, classNa
   return (
     <Tag
       {...(onClick ? { type: 'button', onClick } : {})}
-      className={`flex w-full flex-col gap-3 rounded-2xl border border-line p-4 text-left ${
+      className={`flex w-full min-w-0 flex-col gap-3 rounded-2xl border border-line p-4 text-left ${
         tone === 'soft' ? 'bg-primary-soft' : 'bg-white'
       } ${onClick ? 'transition hover:border-primary' : ''} ${className}`}
     >

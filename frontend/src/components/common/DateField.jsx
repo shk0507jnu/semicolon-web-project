@@ -26,7 +26,7 @@ export default function DateField({ label, value, onChange, labelSize = 'sm' }) 
           value={value}
           onChange={(e) => e.target.value && onChange(e.target.value)}
           onClick={(e) => e.currentTarget.showPicker?.()}
-          className="absolute inset-0 cursor-pointer opacity-0"
+          className="absolute inset-0 w-full min-w-0 cursor-pointer text-base opacity-0"
           required
         />
       </div>

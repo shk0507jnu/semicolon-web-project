@@ -7,6 +7,13 @@ export function useCalendarApi(workspaceId, paths) {
   const key = JSON.stringify([workspaceId, paths, revision]);
   const [result, setResult] = useState({ key: null, data: null, error: null });
   useEffect(() => {
+    const refresh = event => {
+      if (String(event.detail?.workspaceId) === String(workspaceId)) setRevision(value => value + 1);
+    };
+    window.addEventListener('shiftlink:calendar-updated', refresh);
+    return () => window.removeEventListener('shiftlink:calendar-updated', refresh);
+  }, [workspaceId]);
+  useEffect(() => {
     const controller = new AbortController();
     const [wid, urls] = JSON.parse(key);
     Promise.all(urls.map(path => calendarRequest(path, { workspaceId: wid, signal: controller.signal })))
