@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import RequireAuth from './components/auth/RequireAuth';
 import AppLayout from './components/layout/AppLayout';
 import MobileLayout from './components/layout/MobileLayout';
 import { ChatProvider } from './contexts/ChatContext';
@@ -43,7 +44,8 @@ function AppProviders({ children }) {
   );
 }
 
-// TODO(0주차): 'auth' / 'admin' 화면에 로그인·권한 확인(라우트 가드) 붙이기
+// 로그인 확인(라우트 가드): 로그인 후 화면은 RequireAuth 로 감싸서, 로그인 안 했으면 01 로그인으로 보내
+// TODO: 관리자 화면(07·08·09·15) 권한 확인은 워크스페이스 역할 정보와 함께 붙이기
 export default function App() {
   return (
     <BrowserRouter>
@@ -55,39 +57,41 @@ export default function App() {
             <Route path={PATHS.login} element={<LoginPage />} />
             <Route path={PATHS.signup} element={<SignupPage />} />
 
-            {/* 로그인 후 화면: 상단바 + 하단 메뉴 */}
-            <Route element={<AppLayout />}>
-              {/* 1단계 */}
-              <Route path={PATHS.workspaces} element={<WorkspaceSelectPage />} />
-              <Route path={PATHS.workspaceNew} element={<WorkspaceCreatePage />} />
-              <Route path={PATHS.calendar} element={<CalendarDashboardPage />} />
+            {/* 로그인 후 화면: 로그인 확인 → 상단바 + 하단 메뉴 */}
+            <Route element={<RequireAuth />}>
+              <Route element={<AppLayout />}>
+                {/* 1단계 */}
+                <Route path={PATHS.workspaces} element={<WorkspaceSelectPage />} />
+                <Route path={PATHS.workspaceNew} element={<WorkspaceCreatePage />} />
+                <Route path={PATHS.calendar} element={<CalendarDashboardPage />} />
 
-              {/* 2단계 — 07·08·09는 관리자 화면 (TODO: 권한 확인 붙이기) */}
-              <Route path={PATHS.dayDetail} element={<DayDetailPage />} />
-              <Route path={PATHS.scheduleManage} element={<ScheduleManagePage />} />
-              <Route path={PATHS.minStaff} element={<MinStaffPage />} />
-              <Route path={PATHS.members} element={<MembersPage />} />
-              <Route path={PATHS.invite} element={<InvitePage />} />
+                {/* 2단계 — 07·08·09는 관리자 화면 (TODO: 권한 확인 붙이기) */}
+                <Route path={PATHS.dayDetail} element={<DayDetailPage />} />
+                <Route path={PATHS.scheduleManage} element={<ScheduleManagePage />} />
+                <Route path={PATHS.minStaff} element={<MinStaffPage />} />
+                <Route path={PATHS.members} element={<MembersPage />} />
+                <Route path={PATHS.invite} element={<InvitePage />} />
 
-              {/* 3단계 — 15는 관리자 화면 (TODO: 권한 확인 붙이기) */}
-              <Route path={PATHS.swaps} element={<SwapListPage />} />
-              <Route path={PATHS.swapNew} element={<SwapCreatePage />} />
-              <Route path={PATHS.notices} element={<NoticeListPage />} />
-              <Route path={PATHS.noticeDetail} element={<NoticeDetailPage />} />
-              <Route path={PATHS.noticeNew} element={<NoticeCreatePage />} />
+                {/* 3단계 — 15는 관리자 화면 (TODO: 권한 확인 붙이기) */}
+                <Route path={PATHS.swaps} element={<SwapListPage />} />
+                <Route path={PATHS.swapNew} element={<SwapCreatePage />} />
+                <Route path={PATHS.notices} element={<NoticeListPage />} />
+                <Route path={PATHS.noticeDetail} element={<NoticeDetailPage />} />
+                <Route path={PATHS.noticeNew} element={<NoticeCreatePage />} />
 
-              {/* 4단계 */}
-              <Route path={PATHS.payroll} element={<PayrollPage />} />
-              <Route path={PATHS.payrollHistory} element={<PayrollHistoryPage />} />
-              <Route path={PATHS.me} element={<MyPage />} />
+                {/* 4단계 */}
+                <Route path={PATHS.payroll} element={<PayrollPage />} />
+                <Route path={PATHS.payrollHistory} element={<PayrollHistoryPage />} />
+                <Route path={PATHS.me} element={<MyPage />} />
 
-              {PENDING_SCREENS.map((screen) => (
-                <Route
-                  key={screen.no}
-                  path={screen.path}
-                  element={<PlaceholderPage no={screen.no} name={screen.name} />}
-                />
-              ))}
+                {PENDING_SCREENS.map((screen) => (
+                  <Route
+                    key={screen.no}
+                    path={screen.path}
+                    element={<PlaceholderPage no={screen.no} name={screen.name} />}
+                  />
+                ))}
+              </Route>
             </Route>
 
             <Route path="*" element={<PlaceholderPage no="404" name="페이지를 찾을 수 없어" />} />

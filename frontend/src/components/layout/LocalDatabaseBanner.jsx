@@ -4,7 +4,8 @@ import { calendarApiEnabled, demoUserId, desktopPreviewEnabled } from '../../api
 export default function LocalDatabaseBanner() {
   const { pathname } = useLocation();
   if (!calendarApiEnabled && !desktopPreviewEnabled) return null;
-  const previewOnly = /\/(me|invite)(\/|$)/.test(pathname);
+  // 17 내 정보는 이제 오프라인 회원 DB(localDb)에 저장돼서 예시 화면 안내에서 뺐어
+  const previewOnly = /\/invite(\/|$)/.test(pathname);
   const pendingData = /\/(notices|payroll)(\/|$)/.test(pathname);
   return <aside className="border-y border-line bg-primary-soft px-4 py-2 text-xs text-darkblue">
     {desktopPreviewEnabled && <div className="mb-2 flex gap-2" aria-label="미리보기 모드">
@@ -17,7 +18,7 @@ export default function LocalDatabaseBanner() {
           window.location.href = '/w/cafe/calendar?date=2026-09-09';
         }}>{label}</button>)}
     </div>}
-    {calendarApiEnabled ? <label className="flex items-center justify-between gap-2">로컬 DB 데모
+    {calendarApiEnabled ? <label className="flex items-center justify-between gap-2" title="로그인 계정과 별개로, 달력 DB를 어떤 데모 계정으로 볼지 고르는 칸이에요">달력 DB 데모 계정
       <select aria-label="로컬 데모 계정" value={demoUserId()} onChange={e=>{
         localStorage.setItem('shiftlink.demoUserId',e.target.value);
         localStorage.removeItem('shiftlink.currentWorkspaceId');

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/auth/AuthLayout';
 import Button from '../../components/common/Button';
+import Callout from '../../components/common/Callout';
 import Checkbox from '../../components/common/Checkbox';
 import Divider from '../../components/common/Divider';
 import TextField from '../../components/common/TextField';
 import { FIGMA_ASSETS } from '../../assets';
+import { useUser } from '../../contexts/UserContext';
 import { PATHS } from '../../routes/paths';
 
 const SOCIAL_PROVIDERS = [
@@ -15,20 +17,39 @@ const SOCIAL_PROVIDERS = [
 ];
 
 // 01 로그인 (피그마: 01 로그인 · 기존 디자인 통합, 1:4)
+// 오프라인 로컬 DB(src/db/localDb.mjs)에 가입된 이메일·비밀번호와 맞을 때만 들어가져.
+//  - 가입 안 된 이메일 → '가입되지 않은 이메일이에요' + 회원가입 버튼 안내
+//  - 비밀번호 틀림     → '비밀번호가 맞지 않아요'
+// 에러 문구 디자인이 없어서 공통 Callout(빨간 안내 박스)으로 임시 처리
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: '', password: '', remember: false });
+  const location = useLocation();
+  const { isLoggedIn, logIn } = useUser();
+  // 02 회원가입을 마치고 오면 이메일을 미리 채워주고 완료 안내를 보여줘
+  const signedUp = location.state?.signedUpEmail;
+  const [form, setForm] = useState({ email: signedUp ?? location.state?.prefillEmail ?? '', password: '', remember: false });
+  const [error, setError] = useState(null);
+  const [pending, setPending] = useState(false);
+  // 로그인 후에는 원래 가려던 화면(예: 10 초대 링크)으로, 없으면 03 워크스페이스 선택으로
+  const from = location.state?.from;
+  const nextPath = from?.pathname && from.pathname !== PATHS.login ? `${from.pathname}${from.search ?? ''}` : PATHS.workspaces;
+
+  if (isLoggedIn && !pending) return <Navigate to={nextPath} replace />;
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    setError(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: 백엔드 로그인 API 연결 후, 성공하면 워크스페이스 선택 화면으로 이동
-    console.log('로그인 요청', form);
-    navigate(PATHS.workspaces);
+    if (pending) return;
+    setPending(true);
+    const result = await logIn(form);
+    setPending(false);
+    if (result.ok) navigate(nextPath, { replace: true });
+    else setError(result);
   };
 
   const handleSocialLogin = (providerId) => {
@@ -68,8 +89,20 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <Button type="submit" variant="primary">
-          이메일로 로그인
+        {signedUp && !error && <Callout>가입이 완료됐어요. 비밀번호를 입력해서 로그인해 주세요.</Callout>}
+        {error && (
+          <Callout tone="danger">
+            {error.message}
+            {error.code === 'not_found' && (
+              <button type="button" className="ml-1 font-bold underline" onClick={() => navigate(PATHS.signup, { state: { ...location.state, email: form.email } })}>
+                회원가입하기
+              </button>
+            )}
+          </Callout>
+        )}
+
+        <Button type="submit" variant="primary" disabled={pending} aria-busy={pending}>
+          {pending ? '확인하는 중…' : '이메일로 로그인'}
         </Button>
 
         <Divider>간편 로그인</Divider>
@@ -87,7 +120,7 @@ export default function LoginPage() {
           ))}
         </div>
 
-        <Button variant="outline" onClick={() => navigate(PATHS.signup)}>
+        <Button variant="outline" onClick={() => navigate(PATHS.signup, { state: location.state })}>
           회원가입
         </Button>
       </form>

@@ -12,10 +12,11 @@ import BottomNav from './BottomNav';
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const shellRef = useRef(null);
-  const { user } = useUser();
+  const { user, isLoggedIn } = useUser();
   const { workspaces } = useWorkspace();
   const { workspace } = workspaceNavigation(pathname, workspaces);
-  const publicPage = [PATHS.login, PATHS.signup, '/'].includes(pathname);
+  // 로그인 전 화면(또는 로그아웃 상태)에서는 이름·채팅방 같은 개인 정보를 보여주지 않아
+  const publicPage = !isLoggedIn || [PATHS.login, PATHS.signup, '/'].includes(pathname);
   const hasBottomNav = Boolean(workspace);
   // Mobile keyboards can shrink the visual viewport without changing 100dvh.
   // Keep the header, scrolling page and chat inside the actually visible area.
