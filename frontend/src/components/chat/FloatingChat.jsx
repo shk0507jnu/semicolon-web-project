@@ -31,6 +31,11 @@ export default function FloatingChat({ publicPage = false }) {
   const panelRef = useRef(null);
   const launcherRef = useRef(null);
 
+  // Page actions can open the selected workspace room directly.
+  useEffect(() => {
+    if (open && selectedRoomId) setShowRooms(false);
+  }, [open, selectedRoomId]);
+
   const close = () => {
     setOpen(false);
     requestAnimationFrame(() => launcherRef.current?.focus({ preventScroll: true }));
@@ -202,8 +207,8 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
     parsingRef.current = true;
     updateParser(message.id, { status: 'saving', error: null });
     try {
-      await calendarRequest(`/notice-parser/previews/${message.parser.result.id}/confirm`, { workspaceId, method: 'POST' });
-      updateParser(message.id, { status: 'saved' });
+      const saved = await calendarRequest(`/notice-parser/previews/${message.parser.result.id}/confirm`, { workspaceId, method: 'POST', body: {revision: message.parser.result.revision ?? 0} });
+      updateParser(message.id, { status: 'saved', result: {...message.parser.result, ...saved} });
       window.dispatchEvent(new CustomEvent('shiftlink:calendar-updated', { detail: { workspaceId } }));
     } catch (error) {
       updateParser(message.id, { status: 'review', error: error.message });
@@ -281,6 +286,8 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
                 inputRef.current?.focus();
               }}
               onConfirm={() => confirm(message)}
+              onReview={() => { onClose(); navigate(generatePath(PATHS.noticeReview, {workspaceId, previewId: message.parser.result.id})); }}
+              onOpenConditions={() => { onClose(); navigate(generatePath(PATHS.workConditions, {workspaceId})); }}
               onOpenCalendar={openCalendar}
             />}
             {message.schedule && (
@@ -300,8 +307,8 @@ function ChatPanel({ workspaceId, workspace, user, room, updateRoom, onClose, on
             <p className="text-sm leading-[21px] font-medium text-darkblue">공지에서 일정을 정리해 드려요</p>
             <p className="text-xs leading-[18px] text-muted">날짜, 근무자, 시간을 함께 적어 주세요.</p>
             {calendarApiEnabled && <>
-              <p className="text-xs leading-[18px] text-muted">예) 홍길동 11월 29일 13시~15시 근무<br />여러 일정은 한 줄에 한 명씩 입력해 주세요.</p>
-              <p className="text-xs leading-[18px] text-muted">{parserStatus?.gemini_available ? '휴가·선호·제외·횟수 조건도 분석할 수 있어요.' : '현재 날짜·시간 규칙 파서로 테스트할 수 있어요. 휴가·근무 조건 분석은 서버 API 키가 필요해요.'}</p>
+              <p className="text-xs leading-[18px] text-muted">예) 김수진 내일 13시~15시 근무<br />김수진 내일 종일 근무 제외<br />이민수 23일부터 29일까지 최대 3회<br />한 줄에 한 명, 한 조건씩 입력해 주세요.</p>
+              <p className="text-xs leading-[18px] text-muted">{parserStatus?.gemini_available ? '자유로운 문장은 Gemini로 분석합니다.' : '위 형식의 일정·조건은 API 키 없이도 분석합니다. 자유로운 문장·휴가 분석은 API 키가 필요해요.'}</p>
             </>}
           </div>
         )}

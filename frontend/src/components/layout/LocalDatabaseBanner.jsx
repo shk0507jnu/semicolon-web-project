@@ -1,8 +1,17 @@
 import { useLocation } from 'react-router-dom';
-import { calendarApiEnabled, demoUserId, desktopPreviewEnabled } from '../../api/calendar';
+import { useEffect, useState } from 'react';
+import { calendarApiEnabled, calendarRequest, demoUserId, desktopPreviewEnabled } from '../../api/calendar';
 
 export default function LocalDatabaseBanner() {
   const { pathname } = useLocation();
+  const [demoUsers, setDemoUsers] = useState([]);
+  useEffect(() => {
+    if (!calendarApiEnabled) return;
+    const controller = new AbortController();
+    calendarRequest('/demo-users', {signal: controller.signal})
+      .then(result => setDemoUsers(result.items)).catch(() => {});
+    return () => controller.abort();
+  }, []);
   if (!calendarApiEnabled && !desktopPreviewEnabled) return null;
   // 17 내 정보는 이제 오프라인 회원 DB(localDb)에 저장돼서 예시 화면 안내에서 뺐어
   const previewOnly = /\/invite(\/|$)/.test(pathname);
@@ -24,7 +33,7 @@ export default function LocalDatabaseBanner() {
         localStorage.removeItem('shiftlink.currentWorkspaceId');
         window.location.href='/workspaces';
       }} className="rounded border border-line bg-white px-2 py-1">
-        <option value="2">관리자</option><option value="1">홍길동 · 근무자</option>
+        {demoUsers.length ? demoUsers.map(member => <option key={member.id} value={member.id}>{member.name} · {member.role === 'editor' ? '관리자' : '근무자'}</option>) : <option value={demoUserId()}>계정 불러오는 중</option>}
       </select>
     </label> : <p>화면 확인용 예시 데이터입니다. 변경 사항은 저장되지 않아요.</p>}
     {calendarApiEnabled && previewOnly && <p className="mt-1">이 화면은 아직 DB와 연결되지 않은 예시 화면입니다.</p>}

@@ -18,6 +18,7 @@ import { actualToday, eventTimeLabel } from '../../utils/calendarModel.mjs';
 
 export function ApiScheduleManage() {
   const { workspaceId, eyebrow } = useRouteWorkspace();
+  const navigate = useNavigate();
   const [search] = useSearchParams();
   const initialDate = search.get('date') || actualToday();
   const eventId = search.get('event');
@@ -25,6 +26,7 @@ export function ApiScheduleManage() {
   return <div className="flex flex-col gap-5 p-4">
     <PageHeading eyebrow={eyebrow} title={eventId ? '일정 수정' : '근무 배치 추가'} description="저장한 일정은 달력에 반영됩니다." />
     <ApiState {...state} />
+    {state.data?.[0].can_edit && <Button variant="secondary" onClick={() => navigate(generatePath(PATHS.automaticSchedule,{workspaceId}))}>공지 조건으로 자동 배치 살펴보기</Button>}
     {state.data && (state.data[0].can_edit
       ? <ScheduleForm key={`${workspaceId}:${eventId || initialDate}`} workspaceId={workspaceId} initialDate={initialDate} members={state.data[1].items} event={state.data[2]} />
       : <p role="alert" className="text-sm text-muted">관리자만 근무를 배치할 수 있어요.</p>)}

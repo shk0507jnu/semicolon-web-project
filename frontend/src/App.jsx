@@ -22,6 +22,9 @@ import PayrollHistoryPage from './pages/payroll/PayrollHistoryPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import MinStaffPage from './pages/schedule/MinStaffPage';
 import ScheduleManagePage from './pages/schedule/ScheduleManagePage';
+import AutomaticSchedulePage from './pages/schedule/AutomaticSchedulePage';
+import WorkConditionsPage from './pages/schedule/WorkConditionsPage';
+import NoticeReviewPage from './pages/schedule/NoticeReviewPage';
 import SwapCreatePage from './pages/swap/SwapCreatePage';
 import SwapListPage from './pages/swap/SwapListPage';
 import WorkspaceCreatePage from './pages/workspace/WorkspaceCreatePage';
@@ -68,6 +71,9 @@ export default function App() {
                 {/* 2단계 — 07·08·09는 관리자 화면 (TODO: 권한 확인 붙이기) */}
                 <Route path={PATHS.dayDetail} element={<DayDetailPage />} />
                 <Route path={PATHS.scheduleManage} element={<ScheduleManagePage />} />
+                <Route path={PATHS.automaticSchedule} element={<AutomaticSchedulePage />} />
+                <Route path={PATHS.workConditions} element={<WorkConditionsPage />} />
+                <Route path={PATHS.noticeReview} element={<NoticeReviewPage />} />
                 <Route path={PATHS.minStaff} element={<MinStaffPage />} />
                 <Route path={PATHS.members} element={<MembersPage />} />
                 <Route path={PATHS.invite} element={<InvitePage />} />

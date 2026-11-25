@@ -18,6 +18,7 @@ export default function MobileLayout() {
   // 로그인 전 화면(또는 로그아웃 상태)에서는 이름·채팅방 같은 개인 정보를 보여주지 않아
   const publicPage = !isLoggedIn || [PATHS.login, PATHS.signup, '/'].includes(pathname);
   const hasBottomNav = Boolean(workspace);
+  const workflow = /^\/w\/[^/]+\/schedule\/(automatic|conditions|notice-review)(\/|$)/.test(pathname);
   // Mobile keyboards can shrink the visual viewport without changing 100dvh.
   // Keep the header, scrolling page and chat inside the actually visible area.
   useLayoutEffect(() => {
@@ -60,7 +61,7 @@ export default function MobileLayout() {
   }, [pathname]);
   return (
     <div className="min-h-dvh bg-canvas">
-      <div ref={shellRef} className="mobile-shell mx-auto w-full max-w-[393px] bg-canvas" data-bottom-nav={hasBottomNav}>
+      <div ref={shellRef} className="mobile-shell mx-auto w-full max-w-[393px] bg-canvas" data-bottom-nav={hasBottomNav} data-workflow={workflow}>
         <TopNav userName={publicPage ? null : user.name} workspace={workspace}
           onHome={() => shellRef.current?.querySelector('.page-scroll')?.scrollTo({ top: 0, behavior: 'instant' })} />
         <Outlet />

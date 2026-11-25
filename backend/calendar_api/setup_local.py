@@ -12,9 +12,10 @@ if not Path(DB_PATH).exists():
     runpy.run_path(str(Path(__file__).with_name('build.py')))
 init_db()
 if args.demo:
-    from seed_demo import seed
+    from seed_demo import seed, seed_members
     conn = connect()
     try:
+        print(f'Demo members: {len(seed_members(conn))}')
         print(f'Added demo shifts: {seed(conn)}')
     finally:
         conn.close()

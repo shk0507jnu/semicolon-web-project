@@ -10,6 +10,9 @@ export const PATHS = {
   calendar: '/w/:workspaceId/calendar',              // 05
   dayDetail: '/w/:workspaceId/calendar/:date',       // 06
   scheduleManage: '/w/:workspaceId/schedule',        // 07
+  automaticSchedule: '/w/:workspaceId/schedule/automatic',
+  workConditions: '/w/:workspaceId/schedule/conditions',
+  noticeReview: '/w/:workspaceId/schedule/notice-review/:previewId',
   minStaff: '/w/:workspaceId/schedule/min-staff',    // 08
   members: '/w/:workspaceId/members',                // 09
   invite: '/invite/:inviteCode',                     // 10

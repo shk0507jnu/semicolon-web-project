@@ -55,7 +55,7 @@ def test_local_clock_formats(client, text, start, end, day):
     '홍길동 2월 30일 13시~15시 근무', '홍길동 11월 29일 25시~26시 근무',
     '홍길동 11월 29일 15시~13시 근무', '홍길동 11월 29일 오후 13시~15시 근무',
     '없는직원 11월 29일 13시~15시 근무', '11월 29일 13시~15시 근무',
-    '홍길동 11월 29일 13시~15시 근무 불가', '홍길동 11월 29일 13시~15시 휴가',
+    '홍길동 11월 29일 13시~15시 근무일 수도 있음', '홍길동 11월 29일 13시~15시 휴가',
     '홍길동 11월 29일 13시~15시 근무\n관리자 휴가',
     '홍길동 11월 29일부터 3일까지 13시~15시 근무',
     '홍길동 12월 20일 휴가 취소', '홍길동 12월 20일 오전 반차',
@@ -130,13 +130,16 @@ def test_duplicate_rows_blocked_but_adjacent_times_allowed(client):
     assert len(confirm(client, draft).json()['event_ids']) == 2
 
 
-def test_leave_and_conditions_split_and_only_leave_persisted(client, monkeypatch):
-    condition = leave(constraint_type='PREFERRED_SHIFT', shift='DAY')
+def test_leave_and_conditions_persist_to_separate_tables(client, monkeypatch):
+    condition = leave(constraint_type='PREFERRED_SHIFT', shift='DAY', start_date='2026-12-23', end_date='2026-12-23')
     fake_gemini(monkeypatch, [leave(), condition])
-    draft = preview(client, '홍길동 12월 20일부터 22일까지 휴가').json()
+    draft = preview(client, '홍길동 12월 20일부터 22일까지 휴가, 23일 주간 선호').json()
     assert draft['engine'] == 'gemini'
-    assert draft['calendar_count'] == draft['preview_only_count'] == 1
-    ids = confirm(client, draft).json()['event_ids']
+    assert draft['calendar_count'] == draft['constraint_count'] == 1
+    assert draft['preview_only_count'] == 0
+    saved = confirm(client, draft).json()
+    assert len(saved['constraint_ids']) == 1
+    ids = saved['event_ids']
     assert len(ids) == 1
     event = client.get(f'/api/events/{ids[0]}', headers=EDITOR).json()
     assert event['all_day'] and event['end_date'] == '2026-12-22'
@@ -197,12 +200,14 @@ def test_parallel_confirmation_inserts_once(client):
     assert len({tuple(response.json()['event_ids']) for response in responses}) == 1
 
 
-def test_conditions_only_are_preview_only(client, monkeypatch):
+def test_conditions_only_persist_without_calendar_events(client, monkeypatch):
     fake_gemini(monkeypatch, [leave(constraint_type='MAX_SHIFT', shift='NIGHT', value=3)])
     draft = preview(client, '홍길동 12월 야간 근무 최대 3회').json()
-    assert draft['calendar_count'] == 0 and draft['preview_only_count'] == 1
-    assert not draft['can_confirm']
-    assert confirm(client, draft).status_code == 422
+    assert draft['calendar_count'] == 0 and draft['constraint_count'] == 1
+    assert draft['can_confirm']
+    saved = confirm(client, draft)
+    assert saved.status_code == 200 and saved.json()['event_ids'] == []
+    assert len(saved.json()['constraint_ids']) == 1
 
 
 def test_date_outside_calendar_blocks_save(client):

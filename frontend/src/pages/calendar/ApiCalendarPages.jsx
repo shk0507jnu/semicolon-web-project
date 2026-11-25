@@ -64,6 +64,11 @@ export function ApiCalendarDashboard() {
         {me.can_edit && <Button onClick={() => navigate(`${generatePath(PATHS.scheduleManage, { workspaceId })}?date=${selectedDate}`)}>근무 배치 추가</Button>}
       </Card>
     </>}
+    {me?.can_edit && <Card title="공지로 근무표 준비하기">
+      <p className="text-xs leading-5 text-muted">공지에서 근무 조건을 확인하고, 주간 배치 예시를 살펴보세요.</p>
+      <Button onClick={() => navigate(generatePath(PATHS.automaticSchedule,{workspaceId}))}>자동 근무 배치</Button>
+      <Button variant="secondary" onClick={() => navigate(generatePath(PATHS.workConditions,{workspaceId}))}>저장된 근무 조건</Button>
+    </Card>}
     <DashboardSections workspaceId={workspaceId} />
   </div>;
 }

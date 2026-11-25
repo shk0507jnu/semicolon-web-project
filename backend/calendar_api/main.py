@@ -21,6 +21,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query, Response
 from pydantic import BaseModel, Field
 from workspaces import migrate_workspaces
 from notice_parser import create_parser_router, init_parser_db
+from work_constraints import create_constraints_router
 
 DB_PATH = os.environ.get(
     "CALENDAR_DB",
@@ -153,6 +154,13 @@ def get_today() -> date:  # 테스트에서 덮어쓸 수 있도록 의존성으
 
 
 app.include_router(create_parser_router(get_conn, current_member, require_editor))
+app.include_router(create_constraints_router(get_conn, current_member, require_editor))
+
+
+@app.get('/api/demo-users', tags=['로컬 데모'])
+def demo_users(user=Depends(current_user), conn=Depends(get_conn)):
+    # current_user only permits this API with CALENDAR_DEMO_AUTH=1.
+    return {'items': [dict(r) for r in conn.execute('SELECT id,name,role FROM users ORDER BY id')]}
 
 
 # ───────────────────────── 스키마 ─────────────────────────

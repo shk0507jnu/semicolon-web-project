@@ -1,0 +1,1991 @@
+{
+  "signature": "be9cdf6dfdb2c6794f3d13e1982aee29a56ec911904035292337b334a62bc27e",
+  "reference_date": "2026-11-11",
+  "results": {
+    "1": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "김민수 12월 20일부터 22일까지 휴가",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-22"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-22"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.5791578000062145,
+      "retries_used": 0
+    },
+    "2": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "이정석은 12월 15일 연차 쓸게",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이정석",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-15",
+            "end_date": "2026-12-15"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "이정석",
+            "start_date": "2026-12-15",
+            "end_date": "2026-12-15"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.3556742999935523,
+      "retries_used": 0
+    },
+    "3": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "박지훈 11월 25일부터 27일까지 휴가 신청",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-11-25",
+            "end_date": "2026-11-27"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "박지훈",
+            "start_date": "2026-11-25",
+            "end_date": "2026-11-27"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.8938647999893874,
+      "retries_used": 0
+    },
+    "4": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "최수진은 내일 하루 휴가야",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "최수진",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 3.372842099983245,
+      "retries_used": 0
+    },
+    "5": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "이영희는 2027년 1월 3일부터 5일까지 연차",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이영희",
+            "constraint_type": "LEAVE",
+            "start_date": "2027-01-03",
+            "end_date": "2027-01-05"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "이영희",
+            "start_date": "2027-01-03",
+            "end_date": "2027-01-05"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 4.5370877999812365,
+      "retries_used": 0
+    },
+    "6": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "이영희 내일 나이트 근무 제외해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이영희",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 14.40763590001734,
+      "retries_used": 1
+    },
+    "7": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "김민수는 12월 10일 데이 근무 불가능",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.540611100033857,
+      "retries_used": 0
+    },
+    "8": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "이정석 12월 1일부터 3일까지 이브닝 빼줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이정석",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-03",
+            "shift": "EVENING"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-03",
+            "shift": "EVENING"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.299926100007724,
+      "retries_used": 0
+    },
+    "9": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "박지훈은 11월 20일 야간근무 못 해",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-11-20",
+            "end_date": "2026-11-20",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-11-20",
+            "end_date": "2026-11-20",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.3783884000149556,
+      "retries_used": 0
+    },
+    "10": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "정하늘은 12월 5일부터 7일까지 낮 근무 제외",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-07",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-07",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 35.95112739998149,
+      "retries_used": 2
+    },
+    "11": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "박지훈은 12월 10일 데이 근무를 선호해",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 14.782576099969447,
+      "retries_used": 1
+    },
+    "12": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "김민수 12월 12일 나이트 근무 희망",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-12",
+            "end_date": "2026-12-12",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-12",
+            "end_date": "2026-12-12",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.7483955000061542,
+      "retries_used": 0
+    },
+    "13": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "최수진은 12월 3일부터 5일까지 이브닝 선호",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-05",
+            "shift": "EVENING"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-05",
+            "shift": "EVENING"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.299148200021591,
+      "retries_used": 0
+    },
+    "14": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "이영희 내일 데이 근무하고 싶어",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이영희",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.3937210000003688,
+      "retries_used": 0
+    },
+    "15": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "정하늘 11월 28일 야간근무 배정해주면 좋겠어",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-11-28",
+            "end_date": "2026-11-28",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-11-28",
+            "end_date": "2026-11-28",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 12.427388099953532,
+      "retries_used": 1
+    },
+    "16": {
+      "status": "PASS",
+      "category": "MAX_SHIFT",
+      "input": "최수진은 12월 한 달 동안 야간근무 최대 5번",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 5
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 5
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 5.813760899996851,
+      "retries_used": 0
+    },
+    "17": {
+      "status": "PASS",
+      "category": "MIN_SHIFT",
+      "input": "정하늘은 12월 한 달 동안 데이 근무 최소 3번",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 3
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 3
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.5865820000180975,
+      "retries_used": 0
+    },
+    "18": {
+      "status": "PASS",
+      "category": "MAX_SHIFT",
+      "input": "김민수 12월 이브닝 근무 4회 이하로",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "EVENING",
+            "value": 4
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "EVENING",
+            "value": 4
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 6.319650399964303,
+      "retries_used": 0
+    },
+    "19": {
+      "status": "PASS",
+      "category": "MIN_SHIFT",
+      "input": "이정석은 12월 나이트 최소 2회 배정",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이정석",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 2
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 2
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.1975729999830946,
+      "retries_used": 0
+    },
+    "20": {
+      "status": "PASS",
+      "category": "MAX_SHIFT",
+      "input": "박지훈 11월 데이 근무 10번 넘기지 마",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-30",
+            "shift": "DAY",
+            "value": 10
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-30",
+            "shift": "DAY",
+            "value": 10
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.4165908000431955,
+      "retries_used": 0
+    },
+    "21": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "김민수 12월 20일부터 22일까지 휴가고 이정석 12월 21일부터 25일까지 휴가",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-22"
+          },
+          {
+            "employee_name": "이정석",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-25"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-22"
+          },
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "이정석",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-25"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.395449000003282,
+      "retries_used": 0
+    },
+    "22": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "김민수는 12월 10일 데이 제외하고 이영희는 같은 날 나이트 제외해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          },
+          {
+            "employee_name": "이영희",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "DAY"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 4.330051900004037,
+      "retries_used": 0
+    },
+    "23": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "박지훈은 12월 5일 데이 선호하고 최수진은 12월 6일 이브닝 선호해",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-05",
+            "shift": "DAY"
+          },
+          {
+            "employee_name": "최수진",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-06",
+            "end_date": "2026-12-06",
+            "shift": "EVENING"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-05",
+            "shift": "DAY"
+          },
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-06",
+            "end_date": "2026-12-06",
+            "shift": "EVENING"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.4154274999746121,
+      "retries_used": 0
+    },
+    "24": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "김민수는 12월 나이트 최대 4회, 이정석은 12월 데이 최소 5회",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 4
+          },
+          {
+            "employee_name": "이정석",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 4
+          },
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 6.558908600010909,
+      "retries_used": 0
+    },
+    "25": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "정하늘은 12월 10일부터 12일까지 휴가고 박지훈은 12월 15일 나이트 제외해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-12"
+          },
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-15",
+            "end_date": "2026-12-15",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-12"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-15",
+            "end_date": "2026-12-15",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 9.920078100054525,
+      "retries_used": 0
+    },
+    "26": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "이영희는 12월 20일 데이 선호하고 같은 날 나이트는 제외해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이영희",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-20",
+            "shift": "DAY"
+          },
+          {
+            "employee_name": "이영희",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-20",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-20",
+            "shift": "DAY"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-20",
+            "end_date": "2026-12-20",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 12.79638580000028,
+      "retries_used": 1
+    },
+    "27": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "김민수 휴가 처리해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "김민수 직원의 휴가 날짜를 알려주세요."
+      },
+      "elapsed": 17.03683820000151,
+      "retries_used": 1
+    },
+    "28": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "이정석 나이트 근무 제외해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이정석",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "이정석 직원의 나이트 근무 제외 날짜(또는 기간)를 알려주세요."
+      },
+      "elapsed": 4.690028799988795,
+      "retries_used": 0
+    },
+    "29": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "박지훈 12월 10일 근무 빼줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-10"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "박지훈 직원의 12월 10일 근무 중 어떤 근무를 제외할지(데이, 이브닝, 나이트 중 하나) 알려주세요."
+      },
+      "elapsed": 4.169637300015893,
+      "retries_used": 0
+    },
+    "30": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "최수진 12월 야간근무 최대한 줄여줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "최수진 직원의 12월 야간근무 최대 횟수를 구체적인 숫자로 알려주세요."
+      },
+      "elapsed": 1.4594349999679253,
+      "retries_used": 0
+    },
+    "31": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "박지훈은 12월 3일부터 5일까지 연차를 사용할 거야.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-05"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-05"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.3265986000187695,
+      "retries_used": 0
+    },
+    "32": {
+      "status": "PASS",
+      "category": "LEAVE",
+      "input": "최수진은 12월 8일 하루 쉬어.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-08",
+            "end_date": "2026-12-08"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "최수진",
+            "start_date": "2026-12-08",
+            "end_date": "2026-12-08"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 3.139423299988266,
+      "retries_used": 0
+    },
+    "33": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "이영희는 12월 10일부터 12일까지 나이트 근무에서 제외해 줘.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이영희",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-12",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-12",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 4.719762500026263,
+      "retries_used": 0
+    },
+    "34": {
+      "status": "PASS",
+      "category": "FORBIDDEN_SHIFT",
+      "input": "김민수는 12월 14일과 15일에 오후 근무를 못 해.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-14",
+            "end_date": "2026-12-15",
+            "shift": "EVENING"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-14",
+            "end_date": "2026-12-14",
+            "shift": "EVENING"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-15",
+            "end_date": "2026-12-15",
+            "shift": "EVENING"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 4.940886399999727,
+      "retries_used": 0
+    },
+    "35": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "정하늘은 12월 16일부터 18일까지 데이 근무를 선호해.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-16",
+            "end_date": "2026-12-18",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-16",
+            "end_date": "2026-12-18",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.404976500023622,
+      "retries_used": 0
+    },
+    "36": {
+      "status": "PASS",
+      "category": "PREFERRED_SHIFT",
+      "input": "박지훈은 12월 19일 야간 근무로 배정되면 좋겠어.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-19",
+            "end_date": "2026-12-19",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-19",
+            "end_date": "2026-12-19",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.6040546000003815,
+      "retries_used": 0
+    },
+    "37": {
+      "status": "PASS",
+      "category": "MAX_SHIFT",
+      "input": "김민수는 12월 한 달 동안 야간 근무를 3번 이하로 해 줘.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 3
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 3
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 3.182968200009782,
+      "retries_used": 0
+    },
+    "38": {
+      "status": "PASS",
+      "category": "MAX_SHIFT",
+      "input": "최수진은 12월 1일부터 7일까지 이브닝 근무를 최대 2회만 배정해.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "EVENING",
+            "value": 2
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "EVENING",
+            "value": 2
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 14.431422599998768,
+      "retries_used": 1
+    },
+    "39": {
+      "status": "PASS",
+      "category": "MIN_SHIFT",
+      "input": "이정석은 12월 한 달 동안 데이 근무를 최소 5번은 해야 해.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이정석",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.2930231999489479,
+      "retries_used": 0
+    },
+    "40": {
+      "status": "PASS",
+      "category": "MIN_SHIFT",
+      "input": "정하늘은 12월 10일부터 20일까지 야간 근무를 적어도 2회 배정해 줘.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-20",
+            "shift": "NIGHT",
+            "value": 2
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-10",
+            "end_date": "2026-12-20",
+            "shift": "NIGHT",
+            "value": 2
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.6453990999725647,
+      "retries_used": 0
+    },
+    "41": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "김민수는 12월 21일 휴가고, 이영희는 같은 날 야간 근무를 하면 안 돼.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-21"
+          },
+          {
+            "employee_name": "이영희",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-21",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-21"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-21",
+            "end_date": "2026-12-21",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.7353603999945335,
+      "retries_used": 0
+    },
+    "42": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "박지훈은 12월 1일부터 7일까지 야간 근무 최대 2회, 최수진은 같은 기간 주간 근무 최소 3회로 해 줘.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "박지훈",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "NIGHT",
+            "value": 2
+          },
+          {
+            "employee_name": "최수진",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "DAY",
+            "value": 3
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "NIGHT",
+            "value": 2
+          },
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "DAY",
+            "value": 3
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.38047390000429,
+      "retries_used": 0
+    },
+    "43": {
+      "status": "PASS",
+      "category": "COMPLEX",
+      "input": "김민수는 12월 24일과 25일 휴가, 이정석은 12월 24일부터 26일까지 야간 근무 금지, 정하늘은 12월 27일 주간 근무 선호야.",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-24",
+            "end_date": "2026-12-25"
+          },
+          {
+            "employee_name": "이정석",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-24",
+            "end_date": "2026-12-26",
+            "shift": "NIGHT"
+          },
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "PREFERRED_SHIFT",
+            "start_date": "2026-12-27",
+            "end_date": "2026-12-27",
+            "shift": "DAY"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-24",
+            "end_date": "2026-12-24"
+          },
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-25",
+            "end_date": "2026-12-25"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-24",
+            "end_date": "2026-12-26",
+            "shift": "NIGHT"
+          },
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-27",
+            "end_date": "2026-12-27",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 2.1395158999948762,
+      "retries_used": 0
+    },
+    "44": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "김민수 야간 근무 좀 줄여 줘.",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "김민수",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "김민수 직원의 야간 근무 최대 횟수와 적용 기간을 알려주세요."
+      },
+      "elapsed": 5.925919900008012,
+      "retries_used": 0
+    },
+    "45": {
+      "status": "PASS",
+      "category": "CLARIFICATION",
+      "input": "이영희는 야간 근무를 최대 3번만 하게 해 줘.",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "이영희",
+            "shift": "NIGHT",
+            "value": 3
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "이영희 직원의 야간 근무 최대 횟수 적용 기간(시작일과 종료일)을 알려주세요."
+      },
+      "elapsed": 1.56696629995713,
+      "retries_used": 0
+    },
+    "46": {
+      "status": "PASS",
+      "category": "RELATIVE_DATE",
+      "input": "김민수는 모레 하루 휴가야",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-11-13",
+            "end_date": "2026-11-13"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-11-13",
+            "end_date": "2026-11-13"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.4342806999920867,
+      "retries_used": 0
+    },
+    "47": {
+      "status": "PASS",
+      "category": "RELATIVE_DATE",
+      "input": "최수진 이번 달 야간근무 최대 3회로 해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-30",
+            "shift": "NIGHT",
+            "value": 3
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-30",
+            "shift": "NIGHT",
+            "value": 3
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.4056364000425674,
+      "retries_used": 0
+    },
+    "48": {
+      "status": "PASS",
+      "category": "RELATIVE_DATE",
+      "input": "정하늘 다음 달 데이 근무 최소 5번 배정해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "정하늘",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "정하늘",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "DAY",
+            "value": 5
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.3665303000016138,
+      "retries_used": 0
+    },
+    "49": {
+      "status": "PASS",
+      "category": "INVALID_DATE",
+      "input": "김민수 2027년 2월 30일 휴가 처리해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2027-02-30",
+            "end_date": "2027-02-30"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "2027년 2월 30일은 존재하지 않는 날짜입니다. 올바른 휴가 날짜를 다시 입력해주세요."
+      },
+      "elapsed": 1.3256092999945395,
+      "retries_used": 0
+    },
+    "50": {
+      "status": "PASS",
+      "category": "INVALID_DATE",
+      "input": "이영희는 2026년 4월 31일 나이트 근무 제외해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-04-31",
+            "end_date": "2026-04-31",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "2026년 4월 31일은 존재하지 않는 날짜입니다. 올바른 날짜를 입력해주세요."
+      },
+      "elapsed": 3.8543050999869592,
+      "retries_used": 0
+    },
+    "51": {
+      "status": "PASS",
+      "category": "INVALID_DATE",
+      "input": "박지훈은 2026년 12월 20일부터 12월 10일까지 휴가야",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "박지훈 직원의 휴가 시작일이 종료일보다 늦습니다. 날짜를 다시 확인하여 올바르게 입력해주세요."
+      },
+      "elapsed": 3.5820965000311844,
+      "retries_used": 0
+    },
+    "52": {
+      "status": "PASS",
+      "category": "DISCONTINUOUS",
+      "input": "김민수는 12월 3일과 7일에 휴가야",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-03"
+          },
+          {
+            "employee_name": "김민수",
+            "constraint_type": "LEAVE",
+            "start_date": "2026-12-07",
+            "end_date": "2026-12-07"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-03",
+            "end_date": "2026-12-03"
+          },
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-12-07",
+            "end_date": "2026-12-07"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 2.3172111000167206,
+      "retries_used": 0
+    },
+    "53": {
+      "status": "PASS",
+      "category": "DISCONTINUOUS",
+      "input": "이정석은 12월 2일과 5일 야간근무 제외해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "이정석",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-02",
+            "end_date": "2026-12-02",
+            "shift": "NIGHT"
+          },
+          {
+            "employee_name": "이정석",
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-05",
+            "shift": "NIGHT"
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-02",
+            "end_date": "2026-12-02",
+            "shift": "NIGHT"
+          },
+          {
+            "constraint_type": "FORBIDDEN_SHIFT",
+            "employee_name": "이정석",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-05",
+            "shift": "NIGHT"
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 4.051642599981278,
+      "retries_used": 0
+    },
+    "54": {
+      "status": "PASS",
+      "category": "BOUNDARY",
+      "input": "최수진은 12월 한 달 동안 나이트 근무 최대 0회로 해줘",
+      "expected": {
+        "need_clarification": false,
+        "constraints": [
+          {
+            "employee_name": "최수진",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 0
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "최수진",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 0
+          }
+        ],
+        "need_clarification": false
+      },
+      "elapsed": 1.2602727999910712,
+      "retries_used": 0
+    },
+    "55": {
+      "status": "PASS",
+      "category": "BOUNDARY",
+      "input": "김민수는 12월 1일부터 7일까지 야간근무 최소 -1회로 해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "김민수 직원의 야간근무 최소 횟수가 음수(-1)로 입력되었습니다. 올바른 최소 횟수를 정수형태로 다시 입력해주세요."
+      },
+      "elapsed": 1.2377666999818757,
+      "retries_used": 0
+    },
+    "56": {
+      "status": "PASS",
+      "category": "BOUNDARY",
+      "input": "이영희는 12월 1일부터 7일까지 데이 근무 최소 10회로 해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "이영희",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-07",
+            "shift": "DAY",
+            "value": 10
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "2026년 12월 1일부터 7일까지의 기간(7일) 동안 데이 근무 최소 10회는 기간보다 많습니다. 올바른 최소 근무 횟수를 다시 입력해주세요."
+      },
+      "elapsed": 5.141155000019353,
+      "retries_used": 0
+    },
+    "57": {
+      "status": "PASS",
+      "category": "COMPLEX_CLARIFICATION",
+      "input": "김민수는 내일 휴가, 이영희는 야간근무 제외해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "김민수",
+            "start_date": "2026-11-12",
+            "end_date": "2026-11-12"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "이영희 직원의 야간근무 제외 기간을 알려주세요."
+      },
+      "elapsed": 12.719237999990582,
+      "retries_used": 1
+    },
+    "58": {
+      "status": "PASS",
+      "category": "COMPLEX_CLARIFICATION",
+      "input": "박지훈은 12월 5일 데이 선호, 최수진은 12월 야간근무 최대한 줄여줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "PREFERRED_SHIFT",
+            "employee_name": "박지훈",
+            "start_date": "2026-12-05",
+            "end_date": "2026-12-05",
+            "shift": "DAY"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "최수진 직원의 12월 야간근무 최대 횟수(최대 몇 회 이하)를 알려주세요."
+      },
+      "elapsed": 3.7165619999868795,
+      "retries_used": 0
+    },
+    "59": {
+      "status": "PASS",
+      "category": "RECURRENCE",
+      "input": "정하늘은 매달 야간근무 최대 3번만 배정해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "정하늘 직원의 야간근무 최대 3회 제한을 적용할 정확한 기간을 알려주세요."
+      },
+      "elapsed": 3.792521899973508,
+      "retries_used": 0
+    },
+    "60": {
+      "status": "PASS",
+      "category": "CONFLICT_EXTRACTION",
+      "input": "김민수는 12월 야간근무 최대 2회, 최소 5회로 해줘",
+      "expected": {
+        "need_clarification": true,
+        "constraints": [
+          {
+            "employee_name": "김민수",
+            "constraint_type": "MAX_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 2
+          },
+          {
+            "employee_name": "김민수",
+            "constraint_type": "MIN_SHIFT",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 5
+          }
+        ]
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "MAX_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 2
+          },
+          {
+            "constraint_type": "MIN_SHIFT",
+            "employee_name": "김민수",
+            "start_date": "2026-12-01",
+            "end_date": "2026-12-31",
+            "shift": "NIGHT",
+            "value": 5
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "김민수 직원의 12월 야간근무 최대 횟수(2회)가 최소 횟수(5회)보다 적습니다. 횟수를 다시 확인해 주세요."
+      },
+      "elapsed": 1.5390400000032969,
+      "retries_used": 0
+    },
+    "61": {
+      "status": "PASS",
+      "category": "MISSING_INFORMATION",
+      "input": "17~19일",
+      "expected": {
+        "need_clarification": true,
+        "constraints": []
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "정보가 부족합니다. 직원 이름과 요청 종류(휴가, 근무 제외, 근무 선호, 최대/최소 근무 횟수)를 포함하여 다시 입력해주세요."
+      },
+      "elapsed": 6.698221900034696,
+      "retries_used": 0
+    },
+    "62": {
+      "status": "PASS",
+      "category": "MISSING_INFORMATION",
+      "input": "12월 17일부터 19일까지",
+      "expected": {
+        "need_clarification": true,
+        "constraints": []
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "정보가 부족합니다. 직원 이름과 요청 종류(휴가, 근무 제외, 근무 선호, 최대/최소 근무 횟수)를 포함하여 다시 입력해주세요."
+      },
+      "elapsed": 40.42521209997358,
+      "retries_used": 2
+    },
+    "63": {
+      "status": "PASS",
+      "category": "MISSING_INFORMATION",
+      "input": "김민수 12월 17일부터 19일까지",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [],
+        "need_clarification": true,
+        "clarification_message": "김민수 직원의 12월 17일부터 19일까지 요청 종류(휴가, 근무 제외, 근무 선호, 최대/최소 근무 횟수)를 포함하여 다시 입력해주세요."
+      },
+      "elapsed": 4.062425199954305,
+      "retries_used": 0
+    },
+    "64": {
+      "status": "PASS",
+      "category": "MISSING_INFORMATION",
+      "input": "12월 17일부터 19일까지 휴가 신청해줘",
+      "expected": {
+        "need_clarification": true
+      },
+      "actual": {
+        "constraints": [
+          {
+            "constraint_type": "LEAVE",
+            "employee_name": "",
+            "start_date": "2026-12-17",
+            "end_date": "2026-12-19"
+          }
+        ],
+        "need_clarification": true,
+        "clarification_message": "휴가를 신청한 직원의 이름을 알려주세요."
+      },
+      "elapsed": 1.4107339999754913,
+      "retries_used": 0
+    }
+  }
+}
